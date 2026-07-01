@@ -85,7 +85,7 @@ function renderMarkdown(md) {
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) { flush(); continue; }
-    if (/^<(h1|h2|h3|ul|pre|@@CODEBLOCK)/.test(trimmed) || /^@@CODEBLOCK\d+@@$/.test(trimmed)) {
+    if (/^<(h1|h2|h3|ul|pre|div|@@CODEBLOCK)/.test(trimmed) || /^@@CODEBLOCK\d+@@$/.test(trimmed)) {
       flush();
       out.push(trimmed);
     } else {
@@ -195,60 +195,50 @@ const courses = [
   'Quantum Computing', 'Data Structures', 'Algorithms', 'Computer Systems Organization',
   'Calculus', 'Multivariable Calculus', 'Linear Algebra', 'Human Centered Data Science',
   'Cyber Security', 'Applied Data Science', 'Software Engineering', 'Statistics and Probability',
-  'Applied Machine Learning', 'Technology and Economical Development', 'Microeconomics'
+  'Applied Machine Learning', 'Technology and Economical Development', 'Microeconomics',
+  'Science of Complexity', 'Game Theory'
 ];
 
 const techSkills = [
-  { name: 'Machine Learning & AI', level: 5 },
-  { name: 'Python / C++ / R', level: 5 },
-  { name: 'Computer Vision', level: 5 },
-  { name: 'Data Engineering & MLOps', level: 4 },
+  { name: 'Machine Learning', level: 5 },
+  { name: 'Python/C++', level: 5 },
   { name: 'Web Development', level: 4 },
-  { name: 'Cloud & DevOps (AWS, Docker)', level: 4 },
-  { name: 'Quantum Computing (Qiskit)', level: 3 },
+  { name: 'Data Science', level: 4 },
+  { name: 'Cloud Computing', level: 4 },
 ];
 
 const techTimeline = [
   {
-    year: '2026',
-    items: [
-      { title: 'Incoming M.Sc. in Applied Computing, Computer Vision Lab', logo: 'assets/me.png', location: 'University of Saskatchewan, Canada', date: 'Fall 2026', description: 'Beginning a thesis-based M.Sc. in Applied Computing under the supervision of Dr. Mrigank Rochan in the computer vision lab, continuing the research direction in vision and multimodal learning built across the past three years.' },
-      { title: 'Artificial Intelligence Intern, GE Aerospace', logo: 'assets/me.png', location: 'Remote, Abu Dhabi', date: 'Sep 2025 to Jun 2026', description: 'Built 3D reconstruction pipelines for turbine blade inspection, with keypoint detection that extracts consistent geometric features across cameras from different manufacturing sites. Implemented LSTM models for engine health forecasting that reached 94 percent accuracy while accounting for sensor degradation, then productionized the model as a serverless AWS API for real-time predictions. Set up MLOps infrastructure including experiment tracking and model versioning for production use.' },
-    ]
-  },
-  {
     year: '2025',
     items: [
-      { title: 'Research Assistant, Computational Biology and Bioinformatics Lab', logo: 'assets/Computational Biology.png', location: 'NYU Abu Dhabi', date: 'Mar 2025 to May 2026', description: 'Designed a multimodal diagnostic pipeline for Multiple Sclerosis fusing brain MRI with gut microbiome data from a 400 patient dataset. Built custom 3D convolutional networks for MRI volumes and feedforward networks for microbiome sequences, with cross-modal alignment and ablation studies to validate complementarity. Applied SHAP, Grad-CAM, and permutation-based attribution to confirm results aligned with established MS biomarkers. Reached 93 percent accuracy with stratified cross-validation. Work currently under review at MICCAI 2026.' },
-      { title: 'Software Engineer, AirGradient Ltd.', logo: 'assets/me.png', location: 'Remote, hosted in Thailand', date: 'Jul 2025 to Sep 2025', description: 'Implemented time-series anomaly detection for sensor degradation across a distributed environmental sensor network, automatically flagging temperature, humidity, and particulate sensors when instrumental drift exceeded calibration thresholds. Built real-time dashboards for sensor health and reliability scores on web and mobile, plus backend systems for collaborative model training across institutions without sharing raw data.' },
+      { title: 'Research Assistant – Computational Biology & Bioinformatics Lab', logo: 'assets/Computational Biology.png', location: 'NYU Abu Dhabi', date: 'Mar 2025 – Present', description: 'Working on a diagnostic tool for Multiple Sclerosis by combining brain MRI scans and gut microbiome data. Built custom neural networks for these data types and used explainability tools to better understand the results.' },
     ]
   },
   {
     year: '2024',
     items: [
-      { title: 'Research Assistant, Clinical AI Lab (MedCAM)', logo: 'assets/CAI.jpg', location: 'NYU Abu Dhabi', date: 'Nov 2024 to Mar 2026', description: 'Contributed to MedCAM, a modular framework fusing structured EHR data with chest X-ray representations through cross-modal contrastive alignment. Benchmarked five foundation models (ConVIRT, GLoRIA, MedCLIP, MoCo, BarlowTwins) across four hospital datasets and identified an 18 percent performance drop under inter-hospital domain shift. Showed modular adaptation matched full retraining performance at 40 percent lower computational cost.' },
-      { title: 'Research Assistant, Cleveland Clinic Abu Dhabi', logo: 'assets/Cleveland.png', location: 'Abu Dhabi', date: 'Feb 2024 to Nov 2024', description: "Developed machine learning workflows for automated brain structural analysis from clinical MRI, focused on STN volume quantification in Parkinson's disease patients. Applied FreeSurfer for brain segmentation and DSI Studio for diffusion MRI tractography, then performed voxel-based morphometry and connectome analysis to identify neuroanatomical differences across patient groups." },
-      { title: 'Software Engineer, LETSRISE Enterprise, Hub71', logo: 'assets/letsrise_logo.jpeg', location: 'Abu Dhabi', date: 'May 2024 to Oct 2024', description: 'Architected a full-stack web application using Flask, Vue.js, and PostgreSQL for founder-mentor matching, engineering optimized database schemas that achieved 99.9 percent uptime. Built RESTful API endpoints and a matching algorithm computing alignment scores across expertise, goals, and availability.' },
-      { title: 'Data Scientist, Teaching, Learning and Development Lab', logo: 'assets/TLD.jpg', location: 'NYU Abu Dhabi', date: 'Jan 2024 to Present', description: "Conducted structured parent-child interviews and managed qualitative data collection across families in Abu Dhabi, in partnership with the Abu Dhabi Early Childhood Authority, studying children's digital media use. Performed behavioral coding of parent-child interaction sessions using MAGOLD and Interact, and built data visualizations to translate findings for research and policy stakeholders." },
-      { title: 'Microsoft Learn Student Ambassador', logo: 'assets/Microsoft.png', location: 'Remote', date: 'Dec 2023 to May 2024', description: 'Earned 20 plus Microsoft Learn badges across cloud architecture, AI/ML, and DevOps. Led 10 plus technical workshops on Azure and Power Platform, teaching 500 plus students cloud and automation skills, and built sample applications using Azure Functions and Logic Apps.' },
+      { title: 'Research Assistant – Clinical AI Lab (MedCAM)', logo: 'assets/CAI.jpg', location: 'NYU Abu Dhabi', date: 'Nov 2024 – Present', description: 'Helped develop MedCAM, a model that combines chest X-rays with electronic health records. Tested it on large clinical datasets for tasks like classification, segmentation, and detecting unusual cases.' },
+      { title: 'Research Assistant – Cleveland Clinic Abu Dhabi', logo: 'assets/Cleveland.png', location: 'Abu Dhabi', date: 'Feb 2024 – Nov 2024', description: "Created machine learning pipelines to analyze MRI data from Parkinson's patients. Used tools for brain imaging and tracking connections to better understand brain structure changes." },
+      { title: 'Software Engineer – LETSRISE Enterprise / Hub71', logo: 'assets/letsrise_logo.jpeg', location: 'Abu Dhabi', date: 'May 2024 – Oct 2024', description: 'Built a full-stack web app with Flask, Vue.js, and PostgreSQL. Developed secure APIs, live data visualizations, and a system to match identities to help entrepreneurs collaborate.' },
+      { title: 'Data Analyst – Teaching, Learning & Development Lab', logo: 'assets/TLD.jpg', location: 'NYU Abu Dhabi', date: 'Jan 2024 – Present', description: 'Analyzed early childhood development data using Python and R. Created surveys and visualized results to support parenting programs.' },
+      { title: 'Microsoft Learn Student Ambassador', logo: 'assets/Microsoft.png', location: 'Remote', date: 'Dec 2023 – May 2024', description: 'Ran over 10 workshops on cloud computing, DevOps, and AI/ML with Azure. Built demo apps and tools for outreach.' },
     ]
   },
   {
     year: '2023',
     items: [
-      { title: 'Research Assistant, Center for Quantum and Topological Systems', logo: 'assets/me.png', location: 'NYU Abu Dhabi', date: 'Sep 2023 to Aug 2025', description: 'Developed and optimized variational quantum eigensolver pipelines in Qiskit to simulate Hamiltonians relevant to neurometabolic pathways and medical imaging. Designed and benchmarked parameterized quantum circuits for fMRI signal classification on real IBM quantum hardware, comparing quantum and classical encoders under limited-data conditions.' },
+      { title: 'AI & Web Instructor – Faris Technology Institute', logo: 'assets/faris.png', location: 'Addis Ababa', date: 'Jun 2023 – Dec 2023', description: 'Taught full-stack web development and Python for AI to 100+ students. Developed a social entrepreneurship platform in three languages.' },
     ]
   }
 ];
 
 const creativeExperience = [
-  { title: 'Project Manager, Student Success and Well-Being', location: 'NYU Abu Dhabi', date: 'Jan 2023 to Present', description: 'Design creative graphics and visual media for Mental Health Awareness Month, including event flyers and social campaigns. Lead the design of the Highline painting event and coordinate photography and video editing for events and promotional content.' },
-  { title: 'Photographer and Video Editor, Gazelle Newspaper and Media', location: 'Abu Dhabi', date: 'Jan 2023 to Aug 2023', description: "Created visual content by capturing and editing photographs and video for Gazelle's news, features, and opinion sections, and produced documentary films exploring NYU Abu Dhabi community perspectives." },
-  { title: 'Design Intern, Sheikh Mohamed bin Zayed Scholars Program', location: 'NYU Abu Dhabi', date: 'Sep 2023 to Dec 2023', description: "Designed NYUAD's first interactive digital yearbook for the Summer Academy, praised for its innovation in style and narrative. Automated data management with Excel and created promotional materials for international recruitment." },
-  { title: 'Educational Media Producer, Arab Crossroads Studies Program', location: 'Abu Dhabi', date: 'Feb 2023 to Mar 2023', description: 'Updated the program website and managed a recurring newsletter to keep students and faculty informed of program updates and opportunities.' },
-  { title: 'Creative Marketing Intern, ZYWA', location: 'Dubai', date: 'Feb 2023 to Mar 2023', description: 'Crafted marketing strategies that led to a 15 percent increase in brand visibility, produced engaging social content with the design team, and represented ZYWA at the NYUAD Career Fair.' },
-  { title: 'Campus Ambassador and Digital Marketing Intern, StudentsEra', location: 'Remote', date: 'Mar 2023 to Mar 2025', description: 'Developed content that contributed to a 20 percent increase in user engagement, grew social media follower base by 15 percent, and supported an email campaign that led to a 10 percent rise in conversion rates.' },
-  { title: 'AI and Web Instructor, Faris Technology Institute', location: 'Addis Ababa', date: 'Jun 2023 to Dec 2023', description: 'Taught full-stack web development and Python for AI to 100 plus students and developed a social entrepreneurship platform in three languages.' },
+  { title: 'Project Manager – Student Success & Well-Being', location: 'NYU Abu Dhabi', date: 'Jan 2023 – Present', description: 'Led visual campaigns and events for mental health. Created event photos, murals, and videos to bring the community together.' },
+  { title: 'Photographer & Video Editor – Gazelle News Media', location: 'Abu Dhabi', date: 'Jan 2023 – Aug 2023', description: 'Captured and edited photos and videos for student news stories and documentaries.' },
+  { title: 'Design Intern – Sheikh Mohamed bin Zayed Scholars Program', location: 'NYU Abu Dhabi', date: 'Sep 2023 – Dec 2023', description: "Designed NYUAD's first interactive digital yearbook for the Summer Academy. Automated workflows and created recruitment materials." },
+  { title: 'Educational Media Producer – Arab Crossroads Studies', location: 'Abu Dhabi', date: 'Feb 2023 – Mar 2023', description: 'Managed the program website, made newsletters, and promoted educational programs.' },
+  { title: 'Creative Marketing Intern – ZYWA', location: 'Dubai', date: 'Feb 2023 – Mar 2023', description: 'Ran campaigns that boosted brand awareness by 15%. Produced social media and offline event content.' },
+  { title: 'Digital Marketing Intern – StudentsEra', location: 'Remote', date: 'Mar 2023 – Mar 2025', description: 'Handled digital content, grew social media engagement by 20%, and helped run successful email campaigns.' },
 ];
 
 const creativePrinciples = [
@@ -457,6 +447,16 @@ function renderProjectDetail(id) {
     `;
   }
 
+  let paperHtml = '';
+  if (project.paper) {
+    paperHtml = `
+      <a href="${project.paper.url}" target="_blank" rel="noopener" class="paper-badge">
+        <span class="ieee-mark">IEEE</span>
+        <span>${project.paper.label}</span>
+      </a>
+    `;
+  }
+
   container.innerHTML = `
     <div class="detail-hero">
       <img src="${project.imageUrl}" alt="${project.title}" />
@@ -468,6 +468,7 @@ function renderProjectDetail(id) {
     </div>
 
     <div class="detail-body">
+      ${paperHtml}
       ${bodyHtml}
       ${gdriveHtml}
     </div>
@@ -484,6 +485,12 @@ function renderProjectDetail(id) {
       ${project.demo ? `<a href="${project.demo}" target="_blank" rel="noopener">${ICONS.externalLink}<span>Live Demo</span></a>` : ''}
     </div>
   `;
+
+  // Fire any registered interactive widgets for this project (architecture
+  // diagrams, training graveyards, etc) now that the DOM nodes exist.
+  if (typeof projectWidgets !== 'undefined' && projectWidgets[id]) {
+    projectWidgets[id]();
+  }
 }
 
 // ===================================================================
