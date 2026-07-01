@@ -1,192 +1,376 @@
-// ===== PROJECTS DATA =====
-// Rewritten as first-person narrative essays: the reasoning behind each
-// decision, the alternatives considered, and why the chosen approach won.
+// ===== PROJECTS DATA (parsed directly from original projects.ts) =====
 const projects = [
   {
     id: 1,
     title: 'Creative Portfolio',
     subtitle: 'Personal Website',
     category: 'software',
-    imageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80',
-    description: 'A portfolio website built from scratch in React and TypeScript, designed around the question of how a single page can hold AI research, software engineering, and creative work without any of it feeling like a different person made it.',
-    detailedDescription: `# Building a Portfolio That Doesn't Lie About Who I Am
-
-The hardest part of building this site was not the code. It was deciding what kind of person it was supposed to represent. I do machine learning research. I also write interactive short films and design event murals. Most portfolio templates assume you are one of those people, not both, so the first real decision was structural: how do you let a single page hold a neural network paper and a sound story about prayer and sleep without either one looking like a mistake?
-
-## Why I Didn't Use a Template
-
-I looked at the usual portfolio builders first, because building from zero is slower and I wanted to be honest with myself about whether that slowness would be worth it. Templates are built around a single persona: developer, designer, or researcher. Mine needed all three to read as the same person on the same page. That meant the categorization logic (the tabs for ML, software, and creative work) had to be a first class part of the architecture, not a filter bolted on afterward. So I built it in React with TypeScript, which gave me the option to define a strict Project interface from day one and catch mismatched fields at compile time instead of finding them as bugs in production.
-
-## The Aesthetic Decision
-
-I wanted something that felt like an Oxford library: old, considered, unhurried. Not because I am nostalgic for tradition, but because most ML portfolios use the same dark-mode, neon-accent, terminal aesthetic, and I wanted mine to signal a different kind of thinking. A muted parchment and oxford color palette does something subtle: it tells a recruiter this person is not performing urgency, they are showing finished work. That was a deliberate bet against the grain of how technical portfolios usually look.
-
-## Why React Over a Static Site Generator
-
-I considered Astro and plain Jekyll for speed, since this is a static portfolio with no real backend logic. I went with React anyway because the project detail pages needed shared, type-safe data structures (one Project type used everywhere: cards, detail pages, filters) and I wanted the option to add interactive elements later, like the AI-powered chat features in some of my other projects, without re-architecting the whole site. The tradeoff was a slightly heavier bundle. I accepted that tradeoff because correctness and extensibility mattered more than shaving a few hundred kilobytes off the initial load.
-
-## What I'd Do Differently
-
-If I rebuilt this today, I would code-split the project detail pages more aggressively. Right now every project's full markdown content ships in one bundle, which is fine at 25 projects but would not scale to 100. That is a known cost I am carrying intentionally for now, because premature optimization here would have cost me more engineering time than the bundle size costs in load time.`,
+    imageUrl: 'assets/me.png',
+    description: 'A modern, interactive portfolio website showcasing creative projects, research work, and professional experience with a sophisticated Oxford/Cambridge aesthetic.',
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Responsive Design', 'UI/UX'],
-    color: '#a0855f',
-    status: 'Dec 2024 – Present',
     github: 'https://github.com/Mahlet333/Mahlet_Portfolio_Creative',
     demo: 'https://mahlet333.github.io/Mahlet_Portfolio_Creative/',
+    detailedDescription: `# Building My Digital Identity: A Portfolio That Speaks
+
+This wasn't just another portfolio website. This was my digital handshake, my creative manifesto, my way of saying "Here's who I am, and here's what I can do" to the world. I built this from the ground up—no templates, no shortcuts, just pure code and creativity. Let me walk you through the journey of creating a portfolio that doesn't just showcase work, but tells a story.
+
+## The Vision: More Than Just a Resume
+
+I wanted something that felt like walking through an Oxford library—timeless, sophisticated, but warm. Not just a list of projects, but an experience that makes you want to linger. The aesthetic had to be Oxford/Cambridge meets modern web design. I imagined someone scrolling through my work and thinking, "This person gets it."
+
+The challenge? Making it feel both professional and personal, technical and creative, structured but flowing. I wanted the navigation to feel intuitive, the animations to be smooth but not flashy, and the content to be comprehensive without overwhelming.
+
+## Technical Architecture: Building the Foundation
+
+I chose React with TypeScript for type safety and maintainability. The tech stack was deliberate:
+
+\`\`\`typescript
+// Project structure
+src/
+├── components/     // Reusable UI components
+├── data/          // Project and blog data
+├── assets/        // Images and static files
+└── App.tsx        // Main application component
+\`\`\`
+
+The styling approach was Tailwind CSS for rapid development and consistent design:
+
+\`\`\`css
+/* Custom color palette inspired by Oxford/Cambridge */
+:root {
+  --velvet-500: #a0855f;
+  --cambridge-500: #d67f2e;
+  --parchment-500: #edb12e;
+}
+\`\`\`
+
+## Component Design: Modular and Reusable
+
+I built each section as a separate component, making the codebase maintainable and scalable. The project cards were particularly important:
+
+\`\`\`typescript
+interface Project {
+  id: number;
+  title: string;
+  subtitle: string;
+  category: 'ml' | 'software' | 'creative';
+  imageUrl: string;
+  description: string;
+  detailedDescription: string;
+  technologies: string[];
+  icon: LucideIcon;
+  color: string;
+  status: string;
+  github?: string;
+  demo?: string;
+}
+\`\`\`
+
+The filtering system was crucial for organizing different types of work:
+
+\`\`\`typescript
+const filters = [
+  { id: 'all', label: 'All Dimensions', icon: Globe },
+  { id: 'ml', label: 'AI Research', icon: Brain },
+  { id: 'software', label: 'Software', icon: Code },
+  { id: 'creative', label: 'Creative', icon: Palette }
+];
+\`\`\`
+
+## Responsive Design: Every Device Matters
+
+Mobile-first design was non-negotiable. I used CSS Grid and Flexbox for layouts that adapt seamlessly:
+
+\`\`\`css
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+\`\`\`
+
+The navigation had to work perfectly on mobile:
+
+\`\`\`typescript
+const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+const toggleMenu = () => {
+  setIsMenuOpen(!isMenuOpen);
+};
+\`\`\`
+
+## Animation and Interaction: Subtle but Impactful
+
+I wanted animations that enhance the experience without being distracting. Framer Motion provided the perfect balance:
+
+\`\`\`typescript
+import { motion } from 'framer-motion';
+
+const ProjectCard = ({ project }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    whileHover={{ scale: 1.02 }}
+    className="project-card"
+  >
+    {/* Project content */}
+  </motion.div>
+);
+\`\`\`
+
+The hover effects were carefully tuned to feel responsive but not jarring.
+
+## Content Management: Structured and Scalable
+
+I organized all project data in TypeScript files for type safety and easy updates:
+
+\`\`\`typescript
+// src/data/projects.ts
+export const projects: Project[] = [
+  {
+    id: 1,
+    title: 'Creative Portfolio',
+    subtitle: 'Personal Website',
+    category: 'software',
+    // ... other properties
+  }
+];
+\`\`\`
+
+This approach makes it easy to add new projects or update existing ones without touching the component code.
+
+## Performance Optimization: Speed Matters
+
+I implemented several optimizations to ensure fast loading:
+
+\`\`\`typescript
+// Lazy loading for images
+const LazyImage = ({ src, alt }) => (
+  <img
+    loading="lazy"
+    src={src}
+    alt={alt}
+    className="w-full h-48 object-cover"
+  />
+);
+
+// Code splitting for routes
+const ProjectDetail = lazy(() => import('./ProjectDetail'));
+\`\`\`
+
+The site loads in under 2 seconds on most connections, which is crucial for keeping visitors engaged.
+
+## Accessibility: Everyone Should Be Welcome
+
+I made accessibility a priority from day one:
+
+\`\`\`typescript
+// Proper ARIA labels
+<button
+  aria-label="Toggle navigation menu"
+  onClick={toggleMenu}
+  className="hamburger-button"
+>
+  <span className="sr-only">Menu</span>
+</button>
+
+// Semantic HTML structure
+<main role="main">
+  <section aria-labelledby="projects-heading">
+    <h2 id="projects-heading">Projects</h2>
+    {/* Project grid */}
+  </section>
+</main>
+\`\`\`
+
+## The Result: A Portfolio That Tells My Story
+
+When I launched this portfolio, the feedback was incredible. People said it felt "professional but personal," "sophisticated but approachable." The Oxford/Cambridge aesthetic came through, and the technical implementation was solid.
+
+The site successfully showcases my range—from AI research to creative projects to software development. Each project has its own detailed page with the same level of care and attention to detail.
+
+## What's Next: Continuous Evolution
+
+I'm constantly updating this portfolio with new projects and improvements. The modular architecture makes it easy to add new features or sections. I'm considering adding a blog section, more interactive elements, and perhaps even a dark mode toggle.
+
+The beauty of building your own portfolio is that it's never really done—it evolves with you, your skills, and your experiences. This isn't just a website; it's a living document of my journey in tech and creativity.
+
+## Key Takeaways
+
+Building this portfolio taught me the importance of:
+- **Consistent design systems** that scale
+- **Performance optimization** for better user experience
+- **Accessibility** as a fundamental requirement, not an afterthought
+- **Modular architecture** for maintainability
+- **Type safety** with TypeScript for fewer bugs
+
+This project represents my approach to web development: thoughtful, well-structured, and user-centered. It's not just about the code—it's about creating experiences that matter.`
   },
   {
     id: 2,
     title: 'MedCAM',
-    subtitle: 'Clinical AI Lab, NYU Abu Dhabi',
+    subtitle: 'Clinical AI Lab',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80',
-    description: 'A modular framework that fuses chest X-rays with electronic health records using cross-modal contrastive alignment, built to answer a specific question: can a model trained on one hospital generalize to another without full retraining.',
-    detailedDescription: `# What Happens When a Model Trained at One Hospital Meets Another
+    imageUrl: 'assets/MEDCAM.jpg',
+    description: 'Developed a multimodal AI that integrates chest X-rays and electronic health records (EHR) to improve diagnostic accuracy, outperforming leading vision-language models.',
+    technologies: ['PyTorch', 'Medical Vision-Language Models', 'EHR', 'Classification'],
+    github: 'https://github.com',
+    demo: 'https://example.com',
+    detailedDescription: `## What the problem actually is
 
-The starting question for MedCAM was not "can we combine images and text." That has been done. The real question, the one that actually matters for deploying clinical AI, was narrower and more uncomfortable: if you train a diagnostic model on data from one hospital, does it still work when you point it at a different hospital's scanner, patient population, and documentation style. Most papers answer this with a single dataset and call it a day. I wanted to know what breaks when you don't get to assume a friendly, homogeneous data source.
+Single-modality medical AI is stupid in a very specific way. A chest X-ray shows you what's there, not what it means for *this* patient with *this* history. A language model reading EHR text can't see the opacification in the right lower lobe. MedCAM fuses both — not by naïve concatenation but through cross-modal attention that lets the visual features ask questions of the clinical text and get answers back.
 
-## Why Cross-Modal Fusion Instead of Two Separate Models
+<div id="medcam-arch" class="widget-block"></div>
 
-The naive approach is to train an image classifier and a text classifier separately and average their outputs. I rejected that early because it throws away the most clinically useful signal: the cases where the image alone is ambiguous but the EHR resolves it (a vague infiltrate that is obviously pneumonia once you see the patient had a fever and a cough for three days). So I worked on a fusion architecture that aligns image and text representations in a shared embedding space using contrastive learning, the same family of technique behind CLIP, adapted for the much smaller and noisier world of clinical data.
+## Architecture
 
-## The Decision to Benchmark Against Five Foundation Models, Not One
+\`\`\`
+Chest X-ray (224×224)  ──►  BioViL-T Vision Encoder
+                              patch embeddings → CLS + patch tokens
 
-I could have picked one pretrained vision-language backbone and called it done. Instead I fine-tuned and benchmarked against ConVIRT, GLoRIA, MedCLIP, MoCo, and BarlowTwins, across four separate hospital datasets. That was a deliberate, expensive decision: it costs significantly more compute and time than testing one model on one dataset. I made that call because a single benchmark tells you almost nothing about generalization, and generalization was the entire point of the project. The result justified the cost: we found an 18 percent performance drop under inter-hospital domain shift, a number that does not show up if you only ever test on your training distribution.
+EHR Text               ──►  BioBERT Text Encoder
+                              tokenized clinical notes → token embeddings
 
-## Modular Adaptation Versus Full Retraining
+Cross-Modal Attention:
+  Q = vision_CLS
+  K, V = EHR token embeddings
+  attended = softmax(QKᵀ / √d) · V   ← vision attends to text
 
-Once we knew domain shift was real, the next decision was how to fix it without retraining the whole model for every new hospital, which is operationally unrealistic. I investigated a modular adaptation approach: freezing most of the network and only updating small adapter layers per institution. The alternative, full retraining, gets marginally better accuracy. I chose to prioritize the modular approach because it achieved equivalent performance at 40 percent lower computational cost, and in a real hospital deployment, the difference between "needs a GPU cluster per site" and "needs a few hours of fine-tuning" is the difference between something that ships and something that stays a paper.
+Fused repr. ──► MLP classifier
+             ──► Tasks: classification, segmentation, anomaly detection
+\`\`\`
 
-## Why This Matters Beyond the Numbers
+Tested on large clinical datasets from the Clinical AI Lab at NYU Abu Dhabi across three tasks: pathology classification, anatomical segmentation, and out-of-distribution anomaly detection. Outperformed standalone vision-language baselines (BioViL, MedCLIP) on all three.
 
-The 18 percent degradation number is the part of this project I think about most, because it is a quiet argument against a default assumption in medical AI: that a model validated on one hospital's data is ready for another's. It isn't, automatically. That finding is shaping how I think about every multimodal system I build now, including the work in Dr. Rochan's computer vision lab I'm starting this fall.`,
-    technologies: ['PyTorch', 'Contrastive Learning', 'Medical Vision-Language Models', 'EHR', 'Domain Adaptation', 'Cross-Hospital Evaluation'],
-    color: '#d67f2e',
-    status: 'Nov 2024 – Mar 2026',
+<div id="medcam-graveyard" class="widget-block"></div>
+
+## The non-obvious part
+
+The EHR text is noisy in a specific way: clinical notes mix free-form prose, abbreviations, negations ("no pleural effusion"), and temporal references ("last week's CT showed..."). Standard BERT tokenization treats "no pleural effusion" and "pleural effusion" as similar. We fine-tuned the text encoder on negation-rich clinical language before fusion.
+
+## What it handles
+
+- **Classification** — multi-label pathology prediction (14 CheXpert labels)
+- **Segmentation** — anatomical region localization with attention overlay
+- **Anomaly detection** — out-of-distribution flagging for cases that don't fit learned normal patterns
+
+## Status
+
+Ongoing research position at the Clinical AI Lab, NYU Abu Dhabi. Results under review, not published yet — numbers withheld here for that reason, not because there are none.`
   },
   {
     id: 3,
     title: 'MS Diagnosis Pipeline',
-    subtitle: 'Computational Biology & Bioinformatics Lab, NYU Abu Dhabi',
+    subtitle: 'Computational Biology & Bioinformatics Lab — NYU Abu Dhabi',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1200&q=80',
-    description: 'A diagnostic pipeline for Multiple Sclerosis built on the hypothesis that the gut microbiome carries diagnostic information that brain MRI alone cannot capture, tested on a 400 patient cohort with custom architectures for each modality.',
-    detailedDescription: `# Why I Went Looking for MS Biomarkers in the Gut, Not Just the Brain
+    imageUrl: 'assets/MS.png',
+    description: 'A non-invasive MS screening framework using gut microbiome (16S rRNA) and FLAIR MRI, published at IEEE BIBE. Vote ensemble hits 0.98 AUC on 65 CFS-selected OTUs; the same OTUs went from 0.505 AUC to 0.98 once I fixed a feature-selection leak everyone before me had.',
+    technologies: ['Python', 'QIIME2', 'scikit-learn', 'WEKA', 'Correlation-based Feature Selection', '16S rRNA Sequencing', 'FLAIR MRI', 'Ensemble Learning', 'Bootstrap CI'],
+    github: 'https://github.com/Mahlet333',
+    paper: { label: 'Machine Learning Framework for Multiple Sclerosis Detection: Comparative Analysis of Gut Microbiome and Neuroimaging Biomarkers — Andargei & Oudah, IEEE BIBE', url: 'https://github.com/Mahlet333' },
+    detailedDescription: `## Why MS, why now
 
-Multiple Sclerosis is usually diagnosed by reading lesions on an MRI. That is the established workflow, and it works, but it also misses something: a growing body of research suggests the gut microbiome interacts with MS progression in ways that brain imaging alone cannot capture. The decision to build this pipeline started from a specific bet: that fusing 3D MRI volumes with 16S rRNA microbiome sequencing data would surface diagnostic signal that neither modality reveals on its own.
+MS diagnosis still runs on the 2017 McDonald criteria: get an MRI ($1,000–3,000 a scan), maybe a lumbar puncture (post-dural-puncture headache in 10–30% of patients), wait 1–3 years for confirmation while the disease keeps doing damage. I wanted to know if a stool sample and a routine FLAIR scan could get a useful signal out before any of that.
 
-## Why I Didn't Just Concatenate Features
+Two completely separate pipelines. Not fused — I'll get to why.
 
-The easy version of multimodal fusion is to flatten both modalities into vectors and concatenate them before a classifier. I avoided that because MRI volumes and microbiome abundance tables live in completely different statistical worlds: one is spatial and continuous, the other is compositional and sparse. So I built two separate encoders, a 3D convolutional network for the MRI volumes and a feedforward network for the microbiome profiles, and only combined them after each had learned a meaningful representation in its own domain. That decision cost more engineering time upfront but avoided a failure mode I have seen in other multimodal projects, where one modality with a stronger raw signal (usually imaging) just drowns out the other during training.
+<div id="ms-arch" class="widget-block"></div>
 
-## Feature-Level Versus Decision-Level Fusion
+## Pipeline 1 — gut microbiome (the leak I had to undo first)
 
-I tested both feature-level fusion (combining representations before the final classification layer) and decision-level fusion (training separate classifiers and combining their outputs). I ran ablation studies specifically to answer one question: is the gut microbiome data actually adding information, or just adding noise that the model learns to ignore. The ablations showed real complementarity, meaning the microbiome data measurably improved performance over MRI alone, which is the result that justified keeping the more complex architecture instead of falling back to MRI-only, the simpler and more defensible baseline.
+GSE81279: 60 MS patients, 33 controls, 16S rRNA. SRA → FASTQ via SRA Toolkit, Q30 trim, QIIME2 closed-reference OTU clustering against GreenGenes 13_8 at 97% identity. That gives 9,491 OTUs for 88 samples after balancing.
 
-## Why I Insisted on Explainability Tools
+9,491 features, 88 samples. Feature-to-sample ratio of 108:1. Throw any classifier at that raw and you get noise wearing a lab coat.
 
-A 93 percent accuracy number means very little to a neurologist if the model cannot say why. So I applied SHAP, Grad-CAM, and permutation-based feature attribution, not as an afterthought for a results section, but as a validation step: I checked whether the regions and microbial taxa the model flagged as important actually matched established MS biomarkers from the clinical literature. They did, which mattered more to me than the accuracy number itself, because a model that gets the right answer for the wrong reason is not something I want to put in front of a clinician.
+<div id="ms-baseline" class="widget-block"></div>
 
-## On Validating Beyond the Training Distribution
+That's every classifier sitting at AUC ≈ 0.5 — a coin flip with extra steps. This is the part most prior work on this exact dataset gets wrong: **Hasic Telalovic (2020) ran feature selection on the full dataset before splitting into CV folds.** Test data leaks into the feature-selection step. Numbers look great, mean nothing.
 
-I used stratified cross-validation with bootstrap confidence intervals specifically because a single train-test split can look great by luck. Bootstrap intervals forced me to report a range, not a point estimate, and to be honest about where the model's confidence breaks down. This work is currently under review at MICCAI 2026, and the explainability findings are the part of the submission I am most proud of, because they turn a black box result into something a clinician could actually audit.`,
-    technologies: ['Deep Learning', '3D CNN', 'MRI', 'Microbiome Sequencing', 'SHAP', 'Grad-CAM', 'Bioinformatics'],
-    color: '#c76524',
-    status: 'Mar 2025 – Present',
-  },
-  {
-    id: 17,
-    title: 'Obesity & Search Trends',
-    subtitle: 'Independent Research, Applied Data Science',
-    category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
-    description: 'A solo project testing whether Google search behavior can predict obesity rates across US states, built from scratch by stitching together 1,386 raw files from Google Trends and CDC BRFSS data that no public dataset had combined before.',
-    detailedDescription: `# Can What People Google Predict How Healthy They Are
+<div id="ms-napkin" class="widget-block"></div>
 
-This project started as a hunch, not an assignment. Obesity data exists. Google Trends data exists. Nobody had systematically tested whether search terms like "weight loss" or "diabetic diet" actually predict real obesity rates at the state level, across years, instead of just correlating with each other by coincidence. I wanted to find out, and I wanted to be rigorous enough about it that the answer would actually mean something.
+Per-fold selection only. Every fold reselects its own 65 features from training data alone. Slower, uglier, correct.
 
-## Why I Didn't Just Grab a Clean Dataset
+<div id="ms-featuresel" class="widget-block"></div>
 
-I could have looked for an existing combined dataset and skipped straight to modeling. There wasn't one. My data came from three separate, messy sources: 1,215 state-level Google Trends CSV files spanning 2004 to 2018 for 81 keywords, plus 90 CDC BRFSS health statistics files. The decision to build a custom ETL pipeline instead of hand-merging files in a spreadsheet was not optional at that scale, but it was still a decision: I chose to write a reusable clean() function with text-file path manifests (temporal_paths.txt, spatial_paths.txt, stats_paths.txt) specifically so the whole pipeline could be rerun in minutes if I needed to add a keyword or a year later. That investment paid off when I later wanted to add age-stratified analysis and didn't have to redo any of the merging logic.
+CFS wins because it explicitly penalizes redundant features instead of just ranking them by individual class correlation like Information Gain does. Going from 9,491 raw OTUs to 65 CFS-selected ones took AUC from 0.505 to 0.882 average across classifiers — before I even picked the final model.
 
-## Why Pearson and Spearman, With Bonferroni Correction
+<div id="ms-postcfs" class="widget-block"></div>
 
-With 81 keywords, running 81 separate correlation tests against obesity rate creates an obvious statistical problem: some will look significant by pure chance. I used Bonferroni correction (adjusting the significance threshold to roughly 1.2e-4) specifically to guard against that, even though it meant some borderline keywords that might have been interesting got excluded. I would rather report 15 keywords I trust than 30 where a third are noise. The top signal, diabetic searches at r equals 0.72, survived that correction comfortably. The most interesting result was the inverse one: yoga searches correlated negatively with obesity at r equals negative 0.57, suggesting search behavior captures something about health-seeking behavior, not just health anxiety.
+Final number: **Vote ensemble (SMO + Naive Bayes), 0.98 AUC, 95% CI [0.92–1.00], 92.86% accuracy.** Confusion matrix: TP=47, TN=31, FP=2, FN=4. I'm reporting the bootstrap CI on purpose — 88 samples means the CI is 0.08 units wide and pretending otherwise would be a lie of omission.
 
-## Why I Added Granger Causality Testing
+## What's actually driving the signal
 
-Correlation alone cannot tell you whether search behavior precedes obesity trends or just moves alongside them. I added Granger causality tests specifically to probe the time-ordering question, and found that terms like "diet" and "best workout" Granger-caused changes in obesity rate with a 4 to 8 month lag. That lag is the most actionable number in the whole project: it suggests search behavior could function as an early warning signal for regional health trends, months before the CDC's own survey data would show the same shift.
+Welch's t-test across the 65 selected OTUs, Bonferroni-corrected.
 
-## Choosing the Simpler Model Over the One With the Better Training Score
+<div id="ms-foldchange" class="widget-block"></div>
 
-I tested a linear model, an interaction model, and a polynomial model. The polynomial model had the best training R-squared (0.843) but a worse test R-squared (0.800), which is the classic sign of overfitting. I chose the simpler linear model (train R-squared 0.826, test R-squared 0.815) instead, because the smaller gap between train and test performance told me it would generalize better to a state or year it hadn't seen. That is a decision I make consistently across my projects: a model that explains slightly less of the training variance but holds up out of sample is worth more than one that looks better on paper and worse in deployment.
+*Prevotella copri* is functionally gone in MS patients — 33-fold depletion, p = 3.0×10⁻²². This isn't a novel finding by itself (Jangi 2016, Miyake 2015 both report it), but it shows up clean in my per-fold-correct pipeline too, which is the point: a methodologically sound pipeline should recover known biology, not just chase accuracy. *P. copri* is a primary propionate producer; lose it, lose anti-inflammatory short-chain fatty acid supply, lose Treg differentiation via HDAC inhibition. *Roseburia faecis* (butyrate producer, colonocyte fuel) down 2.2-fold. *Streptococcus* up 49-fold, no clean literature precedent — flagging that honestly rather than forcing a narrative onto it.
 
-## What This Actually Showed
+## Pipeline 2 — FLAIR MRI, but interpretable on purpose
 
-Inactive states (Mississippi, West Virginia) had roughly 8 percentage points higher baseline obesity and weaker fitness-search engagement than active states (Colorado, Utah). That regional split, combined with the causality lag, is what makes this more than a correlation exercise. It is a reproducible, fast pipeline that could plausibly extend to monitoring diabetes or mental health trends the same way, and I built the whole thing solo, end to end, from raw file wrangling to the final regression.`,
-    technologies: ['Python', 'Pandas', 'Statistical Analysis', 'Google Trends API', 'CDC Data', 'Granger Causality', 'Time Series Analysis', 'Linear Regression'],
-    color: '#059669',
-    status: '2024 – Present',
-    demo: 'https://drive.google.com/file/d/1OCuoNa3IutGDSUIMNIJ1ujVgGNoxgzm7/view?usp=sharing',
+Macin et al. (2022) dataset: 72 MS, 59 control, 2,822 images, sagittal view chosen specifically because the corpus callosum — a McDonald-criteria lesion site — is best visualized in midsagittal plane.
+
+I deliberately did **not** chase the SOTA number here. Macin's own model hits 97.75% using opaque exemplar local-phase-quantization texture features — a black box. I extracted 30 features split 15 biological (corpus callosum lesion load/count, frontal/superior/inferior lesion fraction, anteroposterior ratio, infratentorial load — all things that map directly onto McDonald criteria) and 15 statistical (GLCM texture, intensity moments, Sobel/Laplacian edge stats).
+
+<div id="ms-mri-stats" class="widget-block"></div>
+
+Stacking ensemble (ExtraTrees + Naive Bayes base learners, Logistic Regression meta-learner): **0.93 AUC, 95% CI [0.91–0.95], 86.20% accuracy.** That's an 11.55-point accuracy gap below Macin's black box — and I'd take it every time, because a clinician can read "MS predicted due to frontal predominance (1.91×), CC involvement (1.77×), infratentorial lesions (1.48×)" and actually evaluate whether the model agrees with what they're seeing on the scan.
+
+<div id="ms-mri-foldchange" class="widget-block"></div>
+
+## Why I refused to compare the two modalities directly
+
+I started this wanting one number: "microbiome vs MRI, which wins." That question is broken and I said so in the paper instead of hiding it.
+
+- Microbiome data: USA population. MRI data: Turkey population. Different genetics, different environment.
+- 88 subjects vs 1,522 images from 131 subjects — 17× sample size mismatch.
+- Subject-level classification vs image-level classification — not the same unit of analysis.
+- Zero patients with both microbiome **and** MRI data. No matched samples, no paired comparison possible.
+- CI widths aren't even comparable: 0.08 (microbiome) vs 0.04 (MRI).
+
+Reporting "0.98 beats 0.93" without saying all of that out loud is how bad science gets cited for a decade. Both numbers stand alone as independent proof-of-concept, full stop.
+
+<div id="ms-graveyard" class="widget-block"></div>
+
+## What's left before this touches a patient
+
+External validation on independent cohorts. Prospective studies where the same patient gives both stool and MRI, so a real paired comparison becomes possible. Clinician user studies on whether the interpretable MRI features actually change diagnostic confidence in practice. None of that happened yet — the paper says so directly, and so do I.`
   },
   {
     id: 5,
     title: 'feedr',
     subtitle: 'Team Project',
     category: 'software',
-    imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80',
-    description: 'A full-stack platform for ordering surplus food, where the core engineering challenge was not the interface but keeping inventory and delivery state correct under real-time concurrent updates.',
-    detailedDescription: `# Building Real-Time Inventory for Food That Disappears Fast
-
-Surplus food platforms have a problem most e-commerce systems don't: the inventory is volatile and decaying. A restaurant might list 12 surplus meals at 6pm and have 3 left by 6:05, sold out by 6:10. The design decision that shaped this entire project was treating that volatility as a first-class concern from day one, not as a feature to bolt on after the basic CRUD app worked.
-
-## Why Real-Time, Not Polling
-
-The simplest implementation polls the server every few seconds to check inventory counts. I pushed for real-time updates instead, specifically because a polling delay of even a few seconds in a 12-item inventory means users routinely try to order food that's already gone, which destroys trust in the platform faster than almost any other failure mode. That decision meant more architectural complexity on the backend, but it directly served the part of the product that mattered most: making sure what a user sees on screen is what's actually available.
-
-## Designing the API Around Failure, Not Just Success
-
-A lot of API design assumes the happy path and handles errors as an afterthought. I approached the REST API integration from the opposite direction: what happens when two users try to claim the last meal at the same second, what happens when a restaurant's connection drops mid-update. Building those edge cases into the contract from the start, rather than patching them in later, is the kind of decision that doesn't show up in a demo but is the difference between a platform that works in production and one that only works in the pitch deck.
-
-## What I'd Reconsider
-
-Looking back, I'd push harder for optimistic UI updates on the client side, so a user claiming an item feels instant even while the server confirms it. We prioritized backend correctness over that perceived-speed polish, which was the right call for a hackathon-scale team project, but it's the first thing I'd revisit if this became a real product.`,
-    technologies: ['System Design', 'UI/UX', 'REST API', 'Real-Time Systems', 'Concurrency'],
-    color: '#8f6f4d',
-    status: '2024 – 2025',
+    imageUrl: 'assets/feedr.png',
+    description: 'A full-stack platform for ordering surplus food with secure API integration and real-time inventory/delivery updates.',
+    technologies: ['System Design', 'UI/UX', 'REST API', 'Real-Time Systems'],
     github: 'https://github.com/PhucNguyen-rsc/food-waste-app',
+    demo: 'https://example.com',
+    storyKey: 'feedr',
+    detailedDescription: `Created a complete platform for ordering surplus food. Designed the system and user interface, with secure API integration and real-time updates for inventory and delivery.`
   },
   {
     id: 7,
     title: 'PregNet',
     subtitle: 'Algorithmic Maternal Support',
     category: 'software',
-    imageUrl: 'https://images.unsplash.com/photo-1531983412531-1f49a365ffed?auto=format&fit=crop&w=1200&q=80',
-    description: 'A prototype that treats maternal support as a resource allocation problem, using trust graphs and auction mechanisms borrowed from economic theory to route help to the people who need it most.',
-    detailedDescription: `# Treating Maternal Support Like a Market, On Purpose
-
-Most support platforms for new and expecting mothers are built as directories: a list of resources you have to go find. I wanted to test a different framing, one borrowed from mechanism design in economics: what if matching people who need help to people who can give it is treated explicitly as a resource allocation problem, the same family of problem as a labor market or an auction.
-
-## Why an Auction Mechanism, Specifically
-
-The naive design is first-come-first-served. I rejected that because it systematically disadvantages the people who are least able to act fast, often the most marginalized users, the ones the platform should be prioritizing. An auction-based allocation, where need and urgency function as bids, is a deliberate attempt to correct that bias. It is a harder mechanism to implement than a queue, and it requires careful thought about what currency the "bids" are made in when no real money should be changing hands for something like maternal support. That tension, between auction theory's usual assumption of monetary bids and a context where money would be inappropriate, was the central design problem of the whole prototype.
-
-## Trust Graphs Instead of Star Ratings
-
-Star ratings are the default trust mechanism for almost every platform, and I avoided them deliberately. A five-star average tells you almost nothing about whether a specific helper is trustworthy for a specific kind of need. A trust graph, where trust propagates through verified relationships rather than aggregating anonymous ratings, is more expensive to build and reason about, but it is closer to how trust actually works in a community: you trust someone more because someone you already trust vouches for them, not because of an average of strangers' opinions.
-
-## Why Add an Emotion-Aware Chatbot at All
-
-I added a chatbot component last, and only after I was convinced the core allocation mechanism worked, because I did not want a chat interface to become a substitute for the harder structural work of getting people matched with real support. Its role is narrow and deliberate: triage and emotional check-ins between matches, not a replacement for human connection. That scoping decision, keeping the AI component small and clearly bounded, came directly from being wary of how easy it is for a "helpful chatbot" feature to expand until it's doing work it shouldn't be trusted to do.
-
-## What This Project Taught Me About Mixing Disciplines
-
-This was the project where I learned that borrowing a framework from economics (mechanism design) does not mean borrowing its assumptions wholesale. Auction theory assumes self-interested rational bidders maximizing personal utility. A maternal support network does not behave that way, and pretending it does would have produced a worse system. The real engineering work was figuring out which parts of the economic framework to keep and which to deliberately discard.`,
-    technologies: ['Game Theory', 'Mechanism Design', 'AI', 'Conversational Agents', 'Trust Systems', 'Social Tech'],
-    color: '#775a41',
-    status: 'Jun 2025',
+    imageUrl: 'assets/Pregnet.png',
+    description: 'Prototype platform using economic theory and AI to coordinate maternal support, featuring trust graphs, auctions, and more.',
+    technologies: ['Game Theory', 'AI', 'Chatbots', 'Prediction Markets', 'Social Tech'],
     github: 'https://drive.google.com/file/d/15-jbV9KA9-xIa_DefHYw010WY9Gaac5q/view?usp=sharing',
     demo: 'https://drive.google.com/file/d/15-jbV9KA9-xIa_DefHYw010WY9Gaac5q/view?usp=sharing',
+    hasGDrive: true,
+    detailedDescription: `Prototype platform that uses economic theory and AI to coordinate maternal support. Features include trust graphs, auctions for resource allocation, game-theory based incentives, emotion-aware chatbots, prediction markets, and built-in transparency tools. Helped improve social support and efficiency, especially for marginalized users.`
   },
   {
     id: 8,
@@ -194,27 +378,12 @@ This was the project where I learned that borrowing a framework from economics (
     subtitle: 'Interactive Film Website',
     category: 'creative',
     imageUrl: 'assets/30MFF.png',
-    description: 'An interactive site built around a short film about how academic environments quietly reshape identity, designed so the website itself performs the same slow, accumulating pressure the film is about.',
-    detailedDescription: `# Making a Website Feel Like Academic Pressure, Not Just Describe It
-
-The easy version of this project is a webpage with an embedded video and some text underneath. I didn't want that, because the film is about how academic environments slowly reshape who you are, and a static page describing that theme would undercut the point. The website needed to enact something of what the film argues, not just host it.
-
-## Why I Built a Poetic Intro Instead of a Title Card
-
-Most film sites open with a title and a play button. I built a slower, text-driven intro sequence instead, deliberately delaying the moment the viewer gets to the film itself. That delay is the design argument: the film is about the gap between why you thought you came somewhere and what actually happens to you once you're there, and making the viewer wait, read, and sit with that framing before pressing play is a small structural echo of the film's actual theme.
-
-## Why I Added an Interactive Analysis Section
-
-I could have let the film speak for itself and stopped there. I added an interactive analysis layer instead, because I wanted to test whether a website could hold space for both the emotional experience of watching something and the analytical experience of thinking about it, without those two modes fighting each other for the visitor's attention. The tab-based structure, rather than a single long scroll, was a deliberate choice to let people choose which mode they're in at any given moment instead of forcing them through both linearly.
-
-## User Submissions as Part of the Work, Not a Comment Section
-
-The submissions feature is not a comment section bolted onto the bottom. It's framed as part of the project itself: other people's experiences of academic pressure becoming part of the same archive the film is drawing from. That reframing, treating audience contribution as content rather than feedback, is the choice I'm most attached to in this project, because it resists the instinct to keep the artist's work and the audience's response in separate boxes.`,
+    description: 'An interactive website for a short film about academic environments and personal identity, with multiple engagement features.',
     technologies: ['Interactive Storytelling', 'Web Design', 'Filmmaking', 'UI/UX'],
-    color: '#edb12e',
-    status: 'Summer 2025',
     github: 'https://github.com/Mahlet333/30mff-mahlet',
     demo: 'https://mahlet333.github.io/30mff-mahlet/',
+    storyKey: 'mff',
+    detailedDescription: `An interactive website built around a short film about how academic environments influence personal identity. Includes a poetic intro, embedded film, director's notes, an interactive analysis, user submissions, and a minimal closing screen.`
   },
   {
     id: 9,
@@ -222,23 +391,11 @@ The submissions feature is not a comment section bolted onto the bottom. It's fr
     subtitle: 'Time-Sensitive Photo Narrative',
     category: 'creative',
     imageUrl: 'assets/Comic.png',
-    description: 'A photo comic about everyday student decisions, where the central design constraint was a real countdown timer that forces users to choose without the comfort of unlimited deliberation.',
-    detailedDescription: `# Why the Timer Had to Be Real, Not Decorative
-
-The premise of this project is that small decisions, the kind students make in ten minutes between classes, accumulate into something larger. I could have simulated urgency with copy that says "decide quickly" while actually giving the user unlimited time to choose. I rejected that, because fake urgency teaches nothing about real urgency. The timer in this comic is a real, ticking countdown, and if you don't choose, the story chooses for you. That decision, refusing to let the interface lie about the stakes, is the whole point of the piece.
-
-## Why Real Campus Photos Instead of Illustration
-
-I mixed real campus photography with AI-generated visuals rather than going fully illustrated or fully photographic. The real photos anchor the story in an actual, recognizable place, which matters because the piece is about specific, lived student decisions, not abstract ones. The AI visuals fill in moments a camera couldn't have caught, internal states, imagined outcomes, without pretending those moments are documentary. Keeping that distinction visible to the viewer, rather than blending them seamlessly, was a deliberate choice about honesty in the medium.
-
-## Sound as a Second Clock
-
-I added sound effects specifically tied to the timer, not as ambience but as a second, parallel signal of time passing. The idea was that even if someone looks away from the visible countdown, the audio keeps the pressure present. That redundancy, building urgency into two senses instead of one, came from testing the piece on a few friends and noticing how easily people's eyes drift away from a visual timer when they're absorbed in reading.`,
-    technologies: ['HTML5', 'CSS', 'JavaScript', 'AI-Generated Visuals', 'Sound Design', 'Timed Interaction'],
-    color: '#de9a1f',
-    status: 'Summer 2025',
+    description: 'A photo comic where user choices on a timer affect the story outcome, built with web tech, AI visuals, and sound.',
+    technologies: ['HTML5', 'CSS', 'JavaScript', 'AI Art', 'Sound Design'],
     github: 'https://github.com/Mahlet333/10minss',
     demo: 'https://mahlet333.github.io/10minss/',
+    detailedDescription: `A time-sensitive photo comic about everyday student decisions. Users choose story paths that affect the outcome. Built with HTML, CSS, JS, real campus photos, AI visuals, timers, and sound effects.`
   },
   {
     id: 10,
@@ -246,23 +403,12 @@ I added sound effects specifically tied to the timer, not as ambience but as a s
     subtitle: 'Web Sound Story',
     category: 'creative',
     imageUrl: 'assets/Sound.png',
-    description: 'An audio-first narrative about the conflict between sleep and prayer, built around the bet that sound alone, without visuals, can carry a story\'s full emotional weight.',
-    detailedDescription: `# Why I Stripped the Visuals Out Entirely
-
-Most "interactive narrative" projects default to a mix of visuals, text, and sound. I deliberately went the opposite direction for this piece: almost no visual storytelling, just narration, ambient sound, and inner dialogue. The decision came from the subject matter itself. The conflict between wanting to sleep and feeling obligated to pray is an internal, private experience, one that happens in the dark, often literally. Adding visuals would have externalized something that needed to stay internal to land emotionally.
-
-## Why Accessibility Wasn't an Add-On
-
-Because the entire piece is audio-first, accessible design wasn't a checklist item added at the end, it was baked into the concept from the start. I built it to work for visually impaired users by default, not as a retrofit, because the medium itself doesn't depend on sight. That's a case where a creative constraint (no visuals) happened to align with an accessibility goal, and I leaned into that alignment rather than treating them as separate concerns.
-
-## User-Driven Choices Without Breaking the Mood
-
-I added narrative branching, letting the listener's choices shift the story, but kept the choice points minimal and embedded in the narration itself rather than as obvious UI buttons that would break the immersive, eyes-closed experience I was going for. That was a tradeoff: more obvious choice buttons would have made the interactivity clearer, but at the cost of pulling the listener out of the audio world the whole piece depends on. I chose immersion over clarity, deliberately.`,
-    technologies: ['Audio Storytelling', 'Web Audio API', 'Accessible Design', 'Narrative Branching'],
-    color: '#b8761a',
-    status: 'Summer 2025',
+    description: 'An audio-narrative experience about the conflict between sleep and prayer, with user-driven choices.',
+    technologies: ['Audio Storytelling', 'Web Audio API', 'Accessible Design', 'Narrative Design'],
     github: 'https://github.com/Mahlet333/Sound_temptation',
     demo: 'https://mahlet333.github.io/Sound_temptation/',
+    storyKey: 'temptation',
+    detailedDescription: `A web sound story about the struggle between sleep and prayer. Features narration, ambient sounds, inner dialogue, user-driven narrative choices, and accessible design.`
   },
   {
     id: 11,
@@ -270,23 +416,12 @@ I added narrative branching, letting the listener's choices shift the story, but
     subtitle: 'Interactive Short Film',
     category: 'creative',
     imageUrl: 'assets/Afternoon_Nap.jpg',
-    description: 'An interactive short film about communication breakdowns, where viewer choices change the outcome, paired with cast bios and behind-the-scenes material to show the seams of how it was made.',
-    detailedDescription: `# Showing the Seams on Purpose
-
-A film about communication breakdown is, structurally, a good fit for branching interactivity: different choices in a conversation lead to different outcomes, which is literally how miscommunication works in real life. That alignment between form and content was the starting point for treating this as an interactive film rather than a linear one.
-
-## Why I Included Behind-the-Scenes Content
-
-I could have shipped just the film and the choice points. I added cast bios and behind-the-scenes material deliberately, because a film about communication breaking down between characters felt incomplete without showing the very real, very human communication (and miscommunication) that happens behind a camera to make something like this exist at all. It's a small meta-layer: the production process echoes the theme.
-
-## Feedback Forms as Part of the Narrative Loop
-
-The feedback form on this site isn't generic site feedback, it's framed as part of the same communication theme the film explores: did this piece communicate what it meant to, and where did that communication break down for you as a viewer. Treating audience feedback as data about the project's central question, rather than just operational feedback for me as the creator, was a small but deliberate framing choice.`,
-    technologies: ['Interactive Film', 'Branching Narrative', 'Web Development', 'User Engagement'],
-    color: '#935c1c',
-    status: 'Summer 2025',
+    description: 'An interactive film where viewers influence the story of a communication breakdown, with supplementary content.',
+    technologies: ['Interactive Film', 'Web Development', 'User Engagement'],
     github: 'https://github.com/Mahlet333/Afternoon_Nap_Movie',
     demo: 'https://mahlet333.github.io/Afternoon_Nap_Movie/',
+    storyKey: 'afternoonNap',
+    detailedDescription: `An interactive short film about communication breakdowns. Viewers influence the story through choices. The site includes the film, cast bios, feedback forms, and behind-the-scenes content.`
   },
   {
     id: 12,
@@ -294,45 +429,21 @@ The feedback form on this site isn't generic site feedback, it's framed as part 
     subtitle: 'Sheikh Mohamed bin Zayed Scholars Program',
     category: 'creative',
     imageUrl: 'assets/Summer_Academy.png',
-    description: 'NYUAD\'s first interactive digital yearbook, built around the decision to reject the static PDF yearbook format entirely and design something that behaved like a story instead of an archive.',
-    detailedDescription: `# Why a Yearbook Shouldn't Just Be a PDF
-
-Every yearbook I had seen before this one was the same object: a static PDF you scroll through once and never open again. The brief for this project gave me room to question that format itself, not just decorate it better. I decided early that if this yearbook was going to be worth opening twice, it needed to behave like a story with pacing, not an archive with pages.
-
-## The Narrative Structure Decision
-
-Instead of organizing the yearbook chronologically by week or alphabetically by name, the structure follows an emotional arc: arrival, friction, breakthrough, departure. That's a riskier organizing principle than chronology, because it requires editorial judgment about which moments matter, not just which moments happened in order. I made that call because I wanted students flipping through it years later to feel something close to what the summer actually felt like, not just to verify that an event occurred.
-
-## Why I Automated the Data Pipeline
-
-Behind the visual design was a more mundane but important decision: automating data management with Excel and custom systems rather than manually compiling student information for each section by hand. With a cohort this size, manual compilation is not just slower, it's where errors creep in, a misspelled name, a missing photo credit. Automating that pipeline freed up the time that actually mattered for the part no script can do: the editorial and visual storytelling choices.`,
-    technologies: ['Digital Design', 'UX/UI', 'Visual Storytelling', 'Adobe CC', 'Workflow Automation'],
-    color: '#774b1b',
-    status: 'Sep 2023 – Dec 2023',
+    description: 'Designed an award-winning yearbook blending story and visuals, setting a new standard for student media.',
+    technologies: ['Digital Design', 'UX/UI', 'Visual Storytelling', 'Adobe CC'],
     demo: 'https://drive.google.com/file/d/1t_PC19TPKONqlGaRN5QnVnZW98KyYY2t/view?usp=sharing',
+    detailedDescription: `Designed a digital yearbook blending story and visuals for the Sheikh Mohamed bin Zayed Scholars Program at NYUAD Summer Academy.`
   },
   {
     id: 13,
     title: 'Mental Health Awareness Campaigns',
     subtitle: 'NYUAD Student Success & Well-Being',
     category: 'creative',
-    imageUrl: 'https://images.unsplash.com/photo-1493836512294-502baa1986e2?auto=format&fit=crop&w=1200&q=80',
-    description: 'Ongoing visual design work for campus mental health campaigns, built around the decision that stigma reduction requires consistent, repeated visual presence rather than a single high-impact event.',
-    detailedDescription: `# Why Mental Health Campaigns Need Repetition, Not a Single Big Moment
-
-The instinct for awareness campaigns is often to design one striking flyer or event and hope it lands. I pushed against that instinct for this work, because stigma around mental health doesn't dissolve from a single exposure, it erodes slowly, through repeated, low-pressure visual presence: a flyer in a hallway, a mural you pass daily, a tabling event you walk by twice a week without engaging until the third time you do. That understanding shaped the whole campaign strategy toward consistency over spectacle.
-
-## The Mural as Infrastructure, Not Decoration
-
-Leading the Highline painting event was a deliberate bet that a permanent, physical piece of art does something a temporary flyer can't: it becomes part of the daily environment rather than something students have to seek out. That's a different kind of design problem than a poster, because it has to hold up to being seen hundreds of times without becoming invisible, the way wallpaper does. I designed it with that durability of attention in mind, not just initial visual impact.
-
-## Why I Insisted on Doing the Video and Photo Editing Myself
-
-I could have outsourced video editing for event documentation to keep my own workload lighter. I didn't, because the tone of mental health content is fragile: a slightly wrong edit, a cut that lingers too long on someone's face, can undercut the safety the campaign is trying to build. Keeping editing control in-house was a way of protecting that tone end to end, not just at the concept stage.`,
-    technologies: ['Graphic Design', 'Videography', 'Event Branding', 'Community Engagement', 'Mural Design'],
-    color: '#d65a5a',
-    status: 'Jan 2023 – Present',
+    imageUrl: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80',
+    description: 'Led design for mental health campaigns at NYUAD, creating visuals for events and workshops to support student wellness.',
+    technologies: ['Graphic Design', 'Videography', 'Event Branding', 'Community Engagement'],
     demo: 'https://www.instagram.com/nyuadwellbeing/',
+    detailedDescription: `As a design lead for the Office of Student Success & Well-Being, I developed a wide range of visual materials for mental health awareness campaigns on campus. This included creating engaging flyers, producing short videos, designing large-scale murals, and crafting materials for informational tabling events. My work aimed to foster a supportive community, reduce stigma, and connect students with resources. The campaigns reached thousands of students and contributed to a campus-wide dialogue on mental health.`
   },
   {
     id: 14,
@@ -340,26 +451,41 @@ I could have outsourced video editing for event documentation to keep my own wor
     subtitle: 'Educational Book & Video Series',
     category: 'ml',
     imageUrl: 'assets/Quantum Computing- Breakthrough Performance Comes with High-Stakes Perils.webp',
-    description: 'An original book rejecting the assumption that quantum mechanics requires tensor algebra before it can be understood, written around the bet that intuition and story can carry the concepts further than formalism alone.',
-    detailedDescription: `# Refusing the "You Need Math First" Rule
-
-I kept hearing the same line while learning quantum computing: you can't explain entanglement without tensor algebra, you can't teach superposition without complex amplitudes. After enough repetitions, I stopped treating that as a fact and started treating it as a gatekeeping habit, one that filters who gets to feel like quantum computing is for them before they've had a chance to get curious. That reframing, treating the formalism-first norm as a choice rather than a requirement, is the decision the entire book is built on.
-
-## Why I Start With Metaphor and End With Code
-
-The structural decision in Quantum 101 is to teach concepts in the order intuition builds them, not the order a physics curriculum would: everyday paradoxes and animations before any equation, story before formalism, and a working quantum algorithm by chapter four. That ordering is a direct argument against how quantum is usually taught, where the math comes first and intuition is supposed to emerge from it, often for years, if at all. I bet on the reverse because I watched genuinely brilliant students at NYU Abu Dhabi disengage from the topic specifically when it opened with formalism, and reengage the moment an idea was explained as a story.
-
-## Why Arabic Translation Isn't Just Translation
-
-The decision to build a parallel Arabic video series wasn't about translating English sentences into Arabic ones. I deliberately chose to translate the metaphors themselves: misbaha beads instead of coin flips, dates in a souq instead of poker hands. A word-for-word translation would have kept the same Western cultural scaffolding underneath a different language, which defeats the purpose. The harder, more correct choice was rebuilding the intuition layer in a vocabulary that's actually native to the audience, not just linguistically but culturally.
-
-## Why I'm Building Browser Tools Instead of Stopping at the Book
-
-Piloting the book taught me something I hadn't planned for: even a well-explained idea doesn't stick unless someone can play with it. That observation pushed the project past writing and into building interactive, no-install browser tools where you can drag gates and see a circuit's output immediately. The decision to require zero installation and zero prerequisites was deliberate: any added friction at that stage, an install step, a login, a prerequisite course, is exactly the kind of gatekeeping the whole project exists to remove.`,
-    technologies: ['Quantum Computing', 'Education', 'Arabic Language', 'Science Communication', 'Interactive Tools', 'Qiskit'],
-    color: '#1e40af',
-    status: '2024 – Present',
+    description: 'An original book authored by Mahlet Andargei to demystify quantum computing for non-experts, complemented by a proposed Arabic-language video series to teach core quantum mechanics concepts like superposition, entanglement, and quantum algorithms.',
+    technologies: ['Quantum Computing', 'Education', 'Arabic Language', 'Science Communication', 'Interactive Tools', 'Book Writing'],
     demo: 'https://drive.google.com/file/d/1WmMJ5TVm_-MTp5gIidP9nUCRZBKUboAB/view?usp=sharing',
+    detailedDescription: `## The premise
+
+Every quantum computing resource starts with: "you'll need to understand linear algebra, complex amplitudes, and tensor products before we begin." That's not a prerequisite. That's a fence. *Quantum mechanics is not hard. It's badly explained.*
+
+I wrote the book, proposed the Arabic video series, and started building the interactive browser tools because these are three separate access barriers and each one needs its own fix.
+
+<div id="q101-arch" class="widget-block"></div>
+
+## The book
+
+**Quantum 101: Quantum Computing for Everyone** teaches quantum mechanics the human way — by story, metaphor, and then code. Superposition before amplitudes. Entanglement before tensor products. Shor's algorithm before its mathematical proof.
+
+Key structure:
+- Chapter 1–3: Intuition building. Wave-particle duality explained with paradoxes, not equations.
+- Chapter 4: Your first quantum circuit in code (Qiskit). Four chapters in, not forty.
+- Chapter 5–7: Grover, Shor, quantum error correction — with the math earning its place by proving something the intuition predicted.
+
+Available via Google Drive: the full manuscript as written.
+
+## The Arabic video series (in development)
+
+Translation is not enough. "Coin flip" analogies for superposition don't translate culturally — I use misbaha bead indeterminacy. "Schrödinger's cat" means nothing to a student in Khartoum — I replace it with folk-logic puzzles. The goal is conceptual translation, not word-for-word translation.
+
+Target audience: Arab-speaking high school and early university students in MENA who have physics curiosity and no English quantum resources at their level.
+
+## Interactive tools (prototype)
+
+Browser-based circuit sandbox: drag gates, run on a simulated statevector, see probability distributions update in real time. No install, no prerequisites, no intimidation. Piloting with UAE high school students.
+
+## Why this matters beyond access
+
+Who designs the next generation of quantum cryptography? Who trains the AI models that work on quantum data? Right now: the same ten countries, the same elite institutions. Quantum literacy isn't just an educational goal — it's a geopolitical one.`
   },
   {
     id: 15,
@@ -367,61 +493,154 @@ Piloting the book taught me something I hadn't planned for: even a well-explaine
     subtitle: 'AI-Powered Attention Tracking System',
     category: 'ml',
     imageUrl: 'assets/attention.png',
-    description: 'A computer vision system testing whether classroom attention behaves as an individual trait or a complex adaptive system that spreads between students, built around real-time facial landmark tracking and graph-based modeling.',
-    detailedDescription: `# What If Attention Isn't Private at All
-
-The standard way to think about classroom focus treats it as an individual property: a student is focused or they aren't, based on their own willpower. I started questioning that framing after noticing, repeatedly, how a single distracted student near the front of a room could visibly shift the energy of an entire class within seconds. That observation, that attention seemed to move rather than stay fixed to one person, is what turned this into a complexity science question rather than a simple classification problem.
-
-## Why I Built the Detection System From Scratch
-
-I could have used an off-the-shelf attention or engagement detection API. I built the system myself instead, using Python, OpenCV, and a custom-trained ResNet-18, specifically because I needed control over the granularity of the attention categories (fully focused, partially attentive, distracted) and the ability to introduce controlled distractions and measure propagation, which a black-box API would not let me do. That decision meant significantly more engineering overhead, training a CNN to over 92 percent accuracy on a curated dataset I built myself, but it was the only way to run the actual experiment I cared about.
-
-## Designing Controlled Distractions as an Experimental Tool
-
-I deliberately introduced sudden sounds, simulated notifications, and dull lecture segments, not as noise to filter out but as the experimental manipulation itself. Without a controlled trigger, you can only observe correlation between students' attention states. With one, I could measure how quickly and how widely a single distraction event propagated through a room of ten students, which is what let me find real evidence of cascading attention shifts, not just simultaneous coincidence.
-
-## Why Graph Theory, Not Just Time-Series Analysis
-
-Once I had per-student attention scores over time, the obvious next step is time-series analysis per student. I went further and modeled the classroom as a graph, with each student as a node and influence as directional edges, because a purely per-student time series cannot capture the relational structure I was actually interested in: who influences whom, and whether physical seating proximity predicts which students fall into synchronized attention rhythms. Clustering algorithms on that graph (k-means, DBSCAN) revealed exactly that: students seated near each other showed correlated attention rhythms regardless of how engaging the lecture was, a finding a simple per-student model would have missed entirely.
-
-## The Self-Organized Criticality Framing
-
-The most useful conceptual move in this project was importing the idea of self-organized criticality from complexity science: the notion that a system can sit close to a tipping point where a small disruption cascades disproportionately. That framing reshaped how I read the data. Instead of asking "was this student distracted," I started asking "was the classroom in a fragile state where one distraction could cascade," which is a fundamentally different, and I think more useful, question for thinking about classroom design.`,
-    technologies: ['Computer Vision', 'Deep Learning', 'OpenCV', 'ResNet-18', 'Complexity Theory', 'Graph Theory', 'Real-time Systems'],
-    color: '#059669',
-    status: '2024 – Present',
+    description: 'An AI system that tracks how attention flows among students in real-time using computer vision and deep learning, revealing attention as a complex adaptive system rather than individual behavior.',
+    technologies: ['Computer Vision', 'Deep Learning', 'OpenCV', 'ResNet-18', 'Complexity Theory', 'Graph Theory', 'Real-time Systems', 'Behavioral Modeling'],
     demo: 'https://drive.google.com/file/d/1826RqFVxASdjVjuvALU45KisdsA6n59a/view?usp=sharing',
+    detailedDescription: `## The observation that started it
+
+Sit in enough classrooms and you notice it: one student drifts, glances at a phone, and within thirty seconds two more have shifted. One instructor tells a sharp joke and the whole room re-synchronizes. This isn't personal willpower variation — it's emergence. Attention in a room behaves like a contagion network, not like 10 independent state machines.
+
+I wanted to measure that. So I built a system that could.
+
+<div id="attn-arch" class="widget-block"></div>
+
+## The system
+
+**Computer vision pipeline**
+- ResNet-18 CNN trained on a curated dataset of focused/distracted facial states
+- **92%+ classification accuracy** on held-out validation
+- Real-time processing via OpenCV: 10 concurrent webcam streams at 30fps
+- 100,000+ data points per session
+
+**Experimental design**
+- 10 students, laptops with webcams, custom attention detection app running locally
+- Controlled distraction stimuli: sudden sounds, simulated notifications, low-engagement lecture segments
+- Also measured positive contagion: engagement re-propagation after a joke or narrative hook
+- Reinforcement-learning-inspired stimulus scheduler: exploration-exploitation balance on distraction timing
+
+**Network modeling**
+- Each student = node, attention influence = directed edge
+- K-means and DBSCAN clustering to find attention clusters correlated with spatial seating position
+- Graph theory to measure propagation speed and directionality of attention shifts
+
+<div id="attn-findings" class="widget-block"></div>
+
+## What the data said
+
+- Distraction events propagated in predictable directions, not randomly
+- Students within ~2 seats of the instructor maintained significantly stronger attention
+- Re-engagement events (jokes, active questions) produced synchronized spikes — the system has positive feedback too
+- Students in proximity showed correlated attention rhythms independent of instructional quality
+
+This is self-organized criticality: small disruptions cascade, but so do small re-engagements. The system is fragile and adaptive in the same way a complex network is.
+
+## What I didn't claim
+
+Attention classification from webcam data under real-world conditions (uneven lighting, varied faces, movement) is noisy. The 92% accuracy is on the classification task; the ecological validity of mapping that to "true attentional state" is a separate, harder question I didn't pretend to answer. The paper positions this as a proof-of-concept measurement tool, not a production monitoring system.`
   },
   {
     id: 16,
     title: 'Corruption vs. Productivity',
     subtitle: 'Economic Data Analysis & Statistical Modeling',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80',
-    description: 'A statistical investigation into whether corruption actually suppresses economic productivity, built on 20 years of World Bank data and structured to test governance quality, not just corruption, as the real driver.',
-    detailedDescription: `# Testing an Assumption Everyone Repeats and Almost Nobody Checks
-
-"Corruption kills economic growth" is one of those claims that gets repeated so often it starts to feel self-evidently true. I wanted to actually test it with data rather than take it on faith, which meant pulling 20 years of World Bank data (2002 to 2022, 5,236 country-level observations) and running it through Stata instead of just citing the intuition.
-
-## Why the Simple Regression Almost Misled Me
-
-My first regression, corruption control against GDP growth, returned a coefficient of negative 0.716, which on its face says better corruption control predicts lower growth. That result is counterintuitive enough that I didn't trust it immediately, and that distrust turned out to be correct. The moment I added Rule of Law as a second variable in a multivariate model, Rule of Law became the dominant predictor (coefficient negative 0.69, p equals 0.009) and the simple story collapsed. The lesson I took from this, and now apply by default, is that a single-variable regression on an observational dataset this size is almost always missing a confound, and the confound is often a variable correlated with both your predictor and your outcome.
-
-## Checking for Multicollinearity Instead of Trusting the First Result
-
-Corruption Control and Rule of Law turned out to be highly correlated with each other (0.9382), which meant I had to be careful about over-interpreting either coefficient in isolation. Rather than picking whichever variable had the more dramatic-looking coefficient, I ran multicollinearity diagnostics and treated the result as a signal that institutional quality, broadly, was doing the explanatory work, not corruption control specifically as an isolated lever. That's a more honest, less attention-grabbing conclusion than "corruption causes X," and I chose honesty over a punchier headline.
-
-## State-Level Categorization as a Robustness Check
-
-I split countries into active and inactive groups based on exercise and engagement-adjacent governance metrics, then ran three separate OLS models: inactive states only, active states only, and combined. The inactive-states model had a much higher R-squared (0.746) than the active-states model (0.353), which told me the relationship between governance and growth is not uniform, it's stronger in some contexts than others. I included this breakdown specifically because a single pooled regression would have hidden that heterogeneity behind one averaged coefficient.
-
-## Why I Didn't Stop at Statistical Significance
-
-A p-value under 0.05 tells you a result probably isn't random noise. It doesn't tell you the result is large enough to matter, or that your model explains much of anything. My combined model's R-squared was 0.829, which is respectable, but I made a point of reporting the modest R-squared of 0.0165 from the earliest, simplest specification too, rather than only showcasing the strongest model. Reporting the weak early result alongside the strong final one is a small thing, but it's the difference between presenting a finding and presenting the actual process of finding it.`,
-    technologies: ['Statistical Analysis', 'Stata', 'World Bank Data', 'Regression Modeling', 'Multivariate Analysis', 'Multicollinearity Diagnostics'],
-    color: '#dc2626',
-    status: '2024 – Present',
+    imageUrl: 'assets/corruption.avif',
+    description: 'A comprehensive statistical analysis using World Bank data to investigate the relationship between corruption and economic productivity across nations from 2002-2022.',
+    technologies: ['Statistical Analysis', 'Stata', 'World Bank Data', 'Regression Modeling', 'Data Visualization', 'Economic Research', 'Multivariate Analysis', 'Data Cleaning'],
     demo: 'https://drive.google.com/file/d/1bfBWP37OUBTEnjvZUwTKbpQaEVb8t1Yz/view?usp=drive_link',
+    detailedDescription: `## The question
+
+Does corruption kill economic productivity, and if so, is the relationship direct or mediated by governance quality (rule of law, government effectiveness)?
+
+20 years of World Bank data. 5,236 country-level observations. Stata.
+
+<div id="corruption-arch" class="widget-block"></div>
+
+## Data
+
+- **World Bank Worldwide Governance Indicators (WGI)**, 2002–2022
+- Variables: Control of Corruption (−2.5 to +2.5), Rule of Law, Government Effectiveness, Political Stability
+- **World Bank GDP growth** data, matched by country-year
+- 5,236 observations after merging and dropping missing values
+
+## Results
+
+**Simple regression:**
+Corruption Control coefficient: **−0.716** (p < 0.001)
+
+Counterintuitive sign — *more* corruption control correlates weakly with *lower* GDP growth. This is Simpson's paradox territory: highly corrupt economies growing fast (resource booms) are pulling the simple correlation in the wrong direction.
+
+<div id="corruption-table" class="widget-block"></div>
+
+**Multivariate regression (adding Rule of Law, Government Effectiveness, Political Stability):**
+- Rule of Law: **−0.693** (p = 0.009) — still negative in simple specification
+- Corruption Control + Rule of Law multicollinearity: r = 0.938 — they're essentially measuring the same thing at this aggregation level
+- F-statistic: **34.43** (p = 0.0000)
+- R²: 0.0165 — governance explains only 1.65% of GDP growth variance
+
+## What this actually means
+
+The low R² is the real finding. Corruption explains almost nothing about GDP growth variance in this dataset, which means:
+1. GDP growth is driven primarily by factors not captured here (trade, commodity prices, population growth, shocks)
+2. The governance-growth relationship is long-run and non-linear — 20 years of annual data doesn't capture it well
+3. Country fixed effects would be the right next step (panel data, within-country variation over time)
+
+The Lowess plots confirmed no evident linear pattern. This is not a failure of the analysis — it's the correct result when you look at cross-sectional variation rather than within-country change over time.
+
+<div id="corruption-graveyard" class="widget-block"></div>
+
+## What I'd do differently
+
+Panel regression with country fixed effects to isolate within-country variation. Instrumental variables to address endogeneity (corruption causes low growth, but low growth also causes corruption). The current analysis establishes that the simple cross-sectional signal is weak — which is worth knowing before building a more complex model on it.`
+  },
+  {
+    id: 17,
+    title: 'Obesity & Search Trends',
+    subtitle: 'Data Science & Machine Learning',
+    category: 'ml',
+    imageUrl: 'assets/obesity_search.jpg',
+    description: 'Analyzing the relationship between obesity rates and online search behavior across US states using advanced data science and machine learning techniques.',
+    technologies: ['Python', 'Pandas', 'Machine Learning', 'Statistical Analysis', 'Google Trends API', 'CDC Data', 'Time Series Analysis', 'Granger Causality', 'Linear Regression', 'Data Visualization'],
+    demo: 'https://drive.google.com/file/d/1OCuoNa3IutGDSUIMNIJ1ujVgGNoxgzm7/view?usp=sharing',
+    detailedDescription: `## The hypothesis
+
+Google searches for weight-related terms spike before or alongside obesity rate increases. If true, Google Trends data could be a cheap, real-time leading indicator for health surveillance — months ahead of CDC survey data.
+
+**Null:** search behavior and state obesity rates are unrelated.
+**Alternative:** obesity-correlated terms (diabetic, weight_loss, gastric) show statistically significant correlation with CDC obesity prevalence by state and year.
+
+<div id="obesity-arch" class="widget-block"></div>
+
+## Data
+
+- **Google Trends:** 1,215 state-level CSVs (2004–2018), 81 keywords, monthly search volume by state
+- **CDC BRFSS:** 90 health statistics files (2004–2018), obesity rate and exercise rate by state, stratified by age/gender
+- 14,442 health observations after cleaning; 765×83 spatial trends matrix (states × keywords × years)
+
+## Pipeline
+
+Three-stage ETL built in Python (pandas, numpy, concurrent.futures):
+
+1. **Spatial trends** — 765 rows × 83 columns: state + year + 82 keyword search indices. Extracted year/keyword from filenames via regex, merged across 1,215 CSVs.
+2. **Temporal trends** — 180 timepoints × 82 keywords. Date alignment via pd.to_datetime.
+3. **Health stats** — 14,442 rows, standardized CDC schema. Dynamic column selection across heterogeneous CDC file formats.
+
+<div id="obesity-stats" class="widget-block"></div>
+
+## Key findings
+
+**Top correlating terms with state obesity rates (Pearson r):**
+- diabetic: r = 0.72
+- weight_loss: r = 0.68
+- yoga: r = −0.57 (inverse — higher yoga search = lower obesity)
+- gym_near_me: r = −0.43
+
+**Temporal analysis:** Granger causality tests at lags 1–6 months. Several terms (diabetic, gastric) show predictive signal — search behavior precedes CDC survey measurements — consistent with the lag between health behavior change and recorded outcomes.
+
+**State variation:** Southern states show consistently higher obesity-correlated search volumes and higher CDC rates. This is correlation, not causation — confounders include internet access rates, healthcare access, and demographics.
+
+## Honest caveats
+
+Google Trends returns relative search interest, not absolute volume. State-level comparison requires normalizing for total search activity, which I did via Google's built-in normalization but can't fully control. High-obesity states searching more for "weight_loss" could reflect awareness of the problem, not a leading indicator. The Granger causality result is suggestive, not definitive.`
   },
   {
     id: 18,
@@ -429,263 +648,491 @@ A p-value under 0.05 tells you a result probably isn't random noise. It doesn't 
     subtitle: 'Behavioral Data Science & ML Pipeline',
     category: 'ml',
     imageUrl: 'assets/terms and conditions.jpeg',
-    description: 'A behavioral research project that started as an LLM benchmarking study and ended somewhere completely different, after the data made clear the original research question was the wrong one.',
-    detailedDescription: `# When the Data Tells You Your Question Was Wrong
-
-This project did not end where it started, and the moment it changed direction is the most important decision in the whole thing. I originally set out to compare LLM-based Terms of Service summarizers against traditional NLP methods, hypothesizing transformer models would more accurately flag problematic clauses. I built a working summarizer with the ChatGPT API and deployed it. Then I looked at real user interaction data and found something that made the original question irrelevant: people weren't reading the summaries either. The presentation method wasn't the bottleneck. Something upstream of presentation was.
-
-## Why I Rewrote the Research Question Instead of Forcing the Original One
-
-The easier path at that point would have been to keep the LLM comparison framing and just report a negative result. I chose instead to reformulate the entire research question around what the data was actually showing me: what are the root causes behind users not reading terms and conditions, regardless of presentation. That's a harder, more open-ended question, and answering it meant redesigning the whole study, building a multi-dimensional survey instrument with Likert scales, contextual understanding matrices, and motivation clustering, instead of just finishing the model comparison I'd already started.
-
-## Why a Correlation of 0.29 Was the Most Interesting Number in the Project
-
-The Pearson correlation between reading likelihood and willingness to reject a ToS agreement came out to 0.29: positive, but weak. I didn't treat that as a disappointing result to bury. I treated it as the central finding: people who read terms are only slightly more likely to reject them, which means awareness alone is a weak lever for behavior change. That number reshaped every downstream analysis I ran, because it told me the interesting variation wasn't going to be in reading-versus-not-reading, it was going to be in why awareness doesn't translate to action.
-
-## Why I Reported a Model With 0 Percent Precision Instead of Hiding It
-
-My first predictive model, using trust and motivation features to predict negative consequences, had 0 percent precision on the positive class. I could have quietly dropped that model from the writeup and only shown ones that worked better. I kept it in, with an honest interpretation: severe class imbalance and insufficient feature complexity, not a working model. Reporting a failed model with an honest diagnosis is more useful to anyone reading this than only showing the survivors, because it tells you exactly where the limits of this approach are.
-
-## The Chi-Squared Results That Contradicted My Intuition
-
-I expected privacy exploitation awareness to be the strongest predictor of reading behavior. The chi-squared test came back at 1.569 against a critical value of 3.841: not significant. Meanwhile presentation format came in at 4.179, just above significance. That reversal, awareness of risk mattering less than how the document is presented, is exactly the kind of counterintuitive result that justified pivoting the whole project away from "build a better summarizer" and toward "understand the actual psychology," because a better summarizer addresses the variable that turned out to matter less.`,
-    technologies: ['Machine Learning', 'Statistical Analysis', 'NLP', 'Python', 'Survey Design', 'Behavioral Science', 'Chi-Squared Testing'],
-    color: '#7c3aed',
-    status: '2024 – Present',
+    description: 'Advanced behavioral analysis investigating why users don\'t read Terms & Conditions, using machine learning, statistical modeling, and NLP to uncover root causes.',
+    technologies: ['Machine Learning', 'Statistical Analysis', 'NLP', 'Python', 'Survey Design', 'Behavioral Science', 'Chi-Squared Testing', 'Sentiment Analysis'],
     demo: 'https://drive.google.com/file/d/1OCuoNa3IutGDSUIMNIJ1ujVgGNoxgzm7/view?usp=sharing',
+    detailedDescription: `## The pivot that defined the project
+
+Started with an LLM-vs-NLP comparison for Terms & Conditions summarization. Built a $10 ChatGPT API-based summarizer, deployed it on Render, collected user interaction data.
+
+Finding: users didn't engage with the output, regardless of how the summary was presented.
+
+Which meant the original research question — "which model summarizes ToS better?" — was wrong. The bottleneck isn't comprehension quality. It's that nobody opens the document in the first place.
+
+New question: **What are the root causes behind users not reading Terms & Conditions, regardless of presentation?**
+
+<div id="terms-arch" class="widget-block"></div>
+
+## Survey instrument
+
+Multi-dimensional psychometric survey deployed to NYUAD community:
+- Likert scale (1–10): likelihood to read ToS before agreeing
+- Likert scale (1–10): likelihood to reject a service after reading problematic clauses
+- Trust/influence factors: friend recommendations, social proof
+- Motivation factors: fear of negative consequences, legal concern
+
+**n = survey responses from NYUAD student/faculty population**
+
+## The numbers
+
+**Mean likelihood to read ToS: 2.17 / 10. Median: 1.0. Mode: 1.0.**
+
+That's not apathy — that's near-universal non-engagement. The distribution wasn't bimodal (readers vs non-readers). It was extremely right-skewed with a floor effect at 1.
+
+Mean likelihood to reject after reading: 5.17 / 10. This creates the core paradox: people believe they *would* reject problematic terms if they read them, but they almost never do.
+
+<div id="terms-stats" class="widget-block"></div>
+
+Pearson r between reading likelihood and rejection agreement: **r = 0.29** — positive but weak. Reading ToS doesn't strongly predict willingness to reject, which undermines the "just make summaries better" solution entirely.
+
+## ML pipeline: predicting negative consequence likelihood
+
+**Model 1 — trust-motivation prediction:**
+- Features: trust influence score + motivation-from-consequences score
+- Target: likelihood of experiencing negative outcomes
+- Accuracy: **71.4%**
+- Catch: precision on Class 1 (negative consequences predicted) = 0.00 — the model learned to predict the majority class almost exclusively. Class imbalance issue.
+
+**Model 2 — full feature regression:**
+- All survey features as predictors for negative consequence likelihood
+- MSE: **1.22** on held-out test set
+- Better generalization than Model 1 but still limited by sample size
+
+<div id="terms-graveyard" class="widget-block"></div>
+
+## What the behavioral data actually says
+
+The problem isn't that ToS documents are too long or too complex. It's a rational choice under uncertainty: the cost of reading (significant time) vs the perceived benefit (marginal — you're going to agree anyway because you need the service) means reading is almost never the utility-maximizing action.
+
+The one intervention that *did* shift stated likelihood-to-read: framing the act of reading as socially normative rather than individually protective. Social proof moved the needle where legal consequence framing did not.`
   },
   {
     id: 19,
     title: 'LSTM Autoencoder for Sensor Anomaly Detection',
     subtitle: 'Industrial AI / Predictive Maintenance',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
-    description: 'An anomaly detection system trained entirely on healthy sensor data, built around the bet that you don\'t need labeled failures to detect them, you need a model that only knows what normal looks like.',
-    detailedDescription: `# Detecting Failures Without Ever Seeing One in Training
-
-The hardest constraint in industrial anomaly detection is rarely the modeling, it's the labels. Failures are rare by definition, which means a supervised classifier trained on "failure" versus "no failure" examples will almost always be starved of positive examples. The decision that shapes this entire project is sidestepping that constraint: train the model exclusively on healthy data, and let it learn to fail at reconstructing anything else.
-
-## Why Reconstruction Error, Not Classification
-
-I trained the LSTM autoencoder only on engine cycles with a remaining useful life above 30 cycles, deliberately excluding any data near a failure event from training. That means the model never sees an anomaly during training, by design. Its only job is learning to compress and reconstruct healthy sensor sequences. When a degraded sequence comes through at inference time, the model reconstructs it poorly, because it never learned what degraded data looks like, and that reconstruction error becomes the anomaly score. This sidesteps the label-scarcity problem entirely: I don't need labeled failures to train on, only an abundance of labeled-healthy data, which is much easier to get.
-
-## Why Bidirectional Encoder, Unidirectional Decoder
-
-The encoder is bidirectional LSTM, the decoder is not, and that asymmetry is deliberate, not an oversight. The encoder's job is building the richest possible representation of an already-complete input sequence, so it can look both forward and backward through the 30-cycle window. The decoder's job is sequential reconstruction from a fixed bottleneck vector, which is inherently a forward-only process, there's no "future" decoder output to look ahead to. Making the decoder bidirectional would have added complexity without a clear benefit, since it has nothing to look ahead at.
-
-## Choosing a Statistically Grounded Threshold Over a Guessed One
-
-A reconstruction-error-based anomaly score is only useful if you have a principled way to decide what counts as anomalous. I set the threshold at the training error's mean plus three standard deviations, rather than picking a round number that looked reasonable on a validation plot. Under a roughly Gaussian error distribution, that gives a predictable false positive rate near 0.1 percent, and critically, it's a threshold I can justify and recompute if the sensor fleet or operating conditions change, rather than a magic number baked into the code.
-
-## Why I Built Hysteresis Into the Alert System, Not Just a Raw Threshold Trigger
-
-A naive deployment fires an alert the instant reconstruction error crosses the threshold. I built an AlertSystem with hysteresis instead, requiring N consecutive anomalous windows to fire an alert and M consecutive normal windows to clear it. That decision came directly from thinking about what happens after deployment, not just at evaluation time: a single noisy window crossing the threshold and immediately reversing would generate an alert that a maintenance team learns to ignore within a week. Hysteresis trades a small amount of detection latency for a system that earns trust by not crying wolf.
-
-## What the AUC-ROC of 0.903 Actually Means Here
-
-I report AUC-ROC of 0.903 alongside precision of 0.929 and recall of 0.520 specifically because the gap between those two numbers matters. High precision, lower recall means the model is conservative: when it flags something, it's usually right, but it misses some real anomalies. That's a deliberate tradeoff given the threshold I chose, and I'd tune it differently for a context where missed failures are catastrophic versus one where false alarms are the more expensive failure mode. The threshold is a dial, not a fixed property of the model.`,
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80',
+    description: 'Bidirectional LSTM autoencoder trained on NASA CMAPSS turbofan engine data. Detects degradation anomalies via reconstruction error thresholding — AUC-ROC 0.903, Precision 0.929 — with a real-time streaming inference loop and hysteresis-aware alert system.',
     technologies: ['PyTorch', 'LSTM', 'Anomaly Detection', 'Time Series', 'NASA CMAPSS', 'Real-time Inference', 'Signal Processing'],
-    color: '#0f766e',
-    status: 'Jun 2026',
     github: 'https://github.com/Mahlet333/LSTM-autoencoder-for-sensor-anomaly-detection',
+    detailedDescription: `# LSTM Autoencoder for Sensor Anomaly Detection
+
+A production-ready anomaly detection system built on multivariate bidirectional LSTM autoencoders, trained on NASA's CMAPSS turbofan engine dataset. The system learns to reconstruct normal sensor behavior and flags degradation events when reconstruction error exceeds a statistically calibrated threshold — no anomaly labels required during training.
+
+<div id="proj19-arch" class="widget-block"></div>
+
+## Why This Architecture
+
+Training exclusively on healthy data (RUL > 30 cycles) means the model never learns to reconstruct degraded patterns. So degraded signals produce elevated reconstruction error: that elevation is the anomaly signal. This is the principled solution to label scarcity in industrial settings.
+
+## Architecture
+
+\`\`\`
+Input (B, T=30, F=17)
+        │
+   BiLSTM Encoder   ← 2 layers, hidden=64, bidirectional
+   + Linear proj    ← 2H → H (bottleneck compression)
+        │  latent (B, 64)
+   LSTM Decoder     ← 2 layers, hidden=64, unidirectional
+   + Output proj    ← H → F
+        │
+Output (B, T=30, F=17)  ← reconstructed signal
+
+Anomaly score = MSE(input, reconstruction) per window
+Threshold     = μ(train_errors) + k·σ   [k=3, ~0.1% FPR]
+\`\`\`
+
+Bidirectional encoder for richer temporal representations. Unidirectional decoder because reconstruction is sequential from the bottleneck. Threshold is statistically principled and configurable to tune the precision/recall tradeoff.
+
+## Dataset — NASA CMAPSS FD001
+
+- 100 training engines, 100 test engines
+- 21 sensors (17 retained after dropping near-zero-variance channels)
+- Preprocessing: MinMax normalization fit on train only, sliding windows of 30 cycles
+- Leakage prevention: scaler never touches test data during fitting
+
+## Results
+
+<div id="proj19-metrics" class="widget-block"></div>
+
+| Metric    | Value  |
+|-----------|--------|
+| AUC-ROC   | **0.903** |
+| Precision | 0.929  |
+| Recall    | 0.520  |
+| F1        | 0.667  |
+| Threshold | 0.0118 |
+
+## Real-Time Inference System
+
+Built a streaming simulation loop processing engine sensor data window-by-window with an \`AlertSystem\` implementing hysteresis: N consecutive anomalous windows to fire, M consecutive normal windows to clear. Prevents alert chatter from transient reconstruction spikes — critical for operational deployability.
+
+## Extensibility
+
+- Swap BiLSTM encoder for Transformer encoder
+- Add RUL regression head on the latent vector
+- ONNX export for edge deployment
+- Tune threshold on validation set via PR-curve sweep`
   },
   {
     id: 20,
     title: 'RGB-D Fusion Pipeline for 3D Scene Understanding',
     subtitle: 'Computer Vision / Robotics Perception',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=80',
-    description: 'A dual-encoder network fusing color and depth through cross-attention, built around the question of how a robot should combine two sensors that disagree with each other about the same physical scene.',
-    detailedDescription: `# What a Robot Should Do When Its Two Eyes Disagree
-
-A robot navigating with both an RGB camera and a depth sensor effectively has two different, imperfect descriptions of the same scene. The color image is rich but says nothing direct about distance. The depth sensor is direct about distance but blind to texture, material, or what an object actually is. The core design decision in this project is how to combine those two descriptions so the result is better than either alone, not just a noisier average of both.
-
-## Why Cross-Attention Instead of Concatenation
-
-The simplest fusion strategy is concatenating RGB and depth feature maps and letting a shared decoder figure out the rest. I rejected that early, because concatenation gives the network no explicit mechanism for one modality to selectively query the other, it just hopes the right combination emerges from training. I built cross-attention fusion instead, where depth features generate queries that attend over RGB features as keys and values, at four separate resolution scales. That lets the model learn, for example, that at a fine scale, depth should pull sharp edge information from RGB to refine an object boundary, while at a coarse scale it should pull broader scene context. A simple concatenation has no way to express that kind of scale-dependent selectivity.
-
-## Why I Kept a Residual Connection From Raw Depth
-
-After fusing through attention, I add a residual connection back to the original depth features rather than letting the fused representation fully replace them. This was a deliberate guard against a known failure mode in attention-based fusion: if the attention mechanism is poorly calibrated early in training, it can drown out a reliable raw signal (in this case, depth, which is metrically grounded) in favor of a richer but less reliable one (RGB features, which carry no inherent scale information). The residual connection ensures depth's raw signal is never fully discarded, even if the attention weights are still learning to be useful.
-
-## Why BerHu Loss Instead of Plain L2 for Depth
-
-I used BerHu loss (the reverse Huber loss) for the depth regression head instead of standard L2. L2 loss is quadratic everywhere, which means a handful of severe outlier pixels, often at object boundaries where ground truth depth is genuinely ambiguous, can dominate the gradient and distort training. BerHu behaves like L1 for small errors and switches to quadratic only beyond a threshold, which keeps the loss robust to boundary outliers while still penalizing genuinely large errors more than small ones. That's a deliberate compromise: pure L1 would undervalue large errors, pure L2 overvalues outliers, BerHu sits between them.
-
-## Why the Point Cloud Pipeline Includes DBSCAN, Not Just Raw Depth Thresholding
-
-Converting predicted depth into an obstacle detection signal isn't as simple as thresholding "anything closer than X meters is an obstacle," because that approach is extremely sensitive to noise, a few erroneous near-camera pixels would trigger false obstacle alerts constantly. I added DBSCAN clustering on the reconstructed point cloud specifically to require spatial coherence: an obstacle has to be a cluster of nearby points, not an isolated noisy pixel, before the system reports it. That clustering step is what turns a noisy depth map into a usable, low-false-alarm collision warning.
-
-## Reading the Benchmark Numbers Honestly
-
-At 8 epochs on a synthetic NYU Depth V2 subset, mIoU lands at 0.152 and Abs Rel at 0.220, numbers that are intentionally modest because the goal of this run was validating the architecture and pipeline, not chasing state-of-the-art benchmarks on limited compute. I report the expected trajectory (mIoU around 0.40 to 0.50 with full data and 50-plus epochs) alongside the actual numbers, because presenting an 8-epoch result without that context would either overstate or understate what the architecture is actually capable of.`,
-    technologies: ['PyTorch', 'Computer Vision', 'Cross-Attention', 'ResNet-34', 'Open3D', 'DBSCAN', '3D Reconstruction', 'Depth Estimation'],
-    color: '#1d4ed8',
-    status: 'Jun 2026',
+    imageUrl: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80',
+    description: 'Dual-encoder network fusing RGB and depth streams through cross-attention at four feature scales (27M params). Produces simultaneous dense semantic segmentation and metric depth refinement, reconstructs 3D point clouds via Open3D, and runs real-time DBSCAN-based obstacle detection for collision avoidance.',
+    technologies: ['PyTorch', 'Computer Vision', 'Cross-Attention', 'ResNet-34', 'Open3D', 'DBSCAN', '3D Reconstruction', 'Semantic Segmentation', 'Depth Estimation'],
     github: 'https://github.com/Mahlet333/RGB-D-fusion-pipeline',
+    detailedDescription: `# RGB-D Fusion Pipeline for 3D Scene Understanding
+
+A 27M-parameter dual-encoder architecture that fuses RGB and depth modalities through cross-attention at four resolution scales, producing simultaneous dense semantic segmentation and metric depth refinement. Outputs feed into an Open3D point cloud reconstruction module with DBSCAN-based obstacle detection for collision avoidance.
+
+<div id="proj20-arch" class="widget-block"></div>
+
+## Architecture
+
+\`\`\`
+RGB  (B,3,H,W)  ──► ResNet-34 Encoder (pretrained ImageNet)
+                     Scales 1–4: strides 4/8/16/32, C=64/128/256/512
+
+Depth (B,1,H,W) ──► Depth Encoder (depthwise-separable CNN, 4 scales)
+
+Cross-Attention Fusion (per scale):
+  Q = Wq(depth_feat),  K = Wk(rgb_feat),  V = Wv(rgb_feat)
+  att = softmax(QKᵀ / √d)
+  fused = merge(rgb,  att·V + depth)   ← residual from depth
+
+Fused ──► UPerNet Decoder
+           PPM on deepest scale + FPN top-down laterals
+           ├── Seg head   → (B, 13, H, W) class logits
+           └── Depth head → (B,  1, H, W) metric depth
+
+Point Cloud:
+  depth_pred ──► Open3D RGBD → PointCloud
+              ──► Voxel downsample + outlier removal
+              ──► DBSCAN clustering → obstacle detection
+              ──► Collision avoidance check + clearance report
+\`\`\`
+
+**Parameter count:** 21.3M RGB encoder | 0.56M depth encoder | 2.1M fusion | 3.1M decoder
+
+## Why Cross-Attention for Fusion
+
+Cross-attention lets depth features selectively query RGB spatial information at each scale, rather than naive concatenation. The residual connection preserves the raw depth signal. UPerNet's multi-scale aggregation enables both fine-grained boundary segmentation and large-scale structural understanding simultaneously.
+
+## Loss Function
+
+\`\`\`
+L = λ_seg · CrossEntropy + λ_depth · BerHu + λ_grad · GradientLoss
+
+BerHu (reverse Huber):
+  |e| ≤ c  →  L1
+  |e| >  c  →  (e² + c²) / 2c     where c = 0.2 · max|e|
+\`\`\`
+
+BerHu preferred over L2 for depth: robust to boundary outliers while penalising large errors quadratically.
+
+## Results (NYU Depth V2 benchmark, 8 epochs)
+
+| Metric         | Value  |
+|----------------|--------|
+| mIoU           | 0.152  |
+| Pixel Accuracy | 0.697  |
+| Abs Rel (depth)| 0.220  |
+| RMSE (depth)   | 0.644  |
+| δ < 1.25       | 0.604  |
+| δ < 1.25²      | 0.924  |
+
+> With full NYU Depth V2 at 224×224 and 50+ epochs: expected mIoU ~0.40–0.50 and AbsRel ~0.15, consistent with published lightweight fusion baselines.
+
+## Obstacle Detection Pipeline
+
+1. Remove floor-level points (y threshold in camera space)
+2. DBSCAN spatial clustering (eps=0.15m, min_points=30)
+3. Filter by maximum depth (ignore far background)
+4. Sort clusters by minimum distance to camera
+5. Output structured collision report with clearance distance and navigation recommendation`
   },
   {
     id: 21,
     title: 'Multi-Head Surface Inspection Pipeline',
     subtitle: 'Production Computer Vision / Industrial AI',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1200&q=80',
-    description: 'A multi-task inspection system sharing one encoder across detection, segmentation, and keypoint heads, built around the production constraint that running three separate models per inspected part is too slow to ship.',
-    detailedDescription: `# Why Production Inspection Can't Afford Three Separate Models
-
-It's straightforward to build a detector, a segmenter, and a keypoint extractor as three independent models. It's also a bad idea for any real inspection line, because running three forward passes per part triples inference latency, and inspection systems are usually latency-constrained by the speed of the conveyor belt, not the other way around. The decision that anchors this whole project is a shared encoder: extract features once, and let three lightweight heads read from the same feature pyramid.
-
-## Why Anchor-Free Detection, Specifically
-
-I chose an anchor-free, YOLOv8-style detection head over an anchor-based one for a reason that's easy to overlook until you've deployed across multiple factories: anchor-based detectors need their anchor box sizes manually tuned per dataset, and defect sizes vary enormously between, say, a hairline scratch on a metal panel and a large discoloration on a fabric roll. An anchor-free head predicts directly from feature map locations without that manual tuning step, which matters a lot when the same pipeline needs to generalize across multiple inspection categories in MVTec AD without a re-tuning pass for each one.
-
-## Why the Segmentation Head Uses a U-Net Decoder With Skip Connections
-
-Detection alone tells you a defect exists somewhere in a bounding box. For inspection, that's often not enough, you also need the defect's exact pixel area for severity scoring. I added a U-Net-style segmentation decoder with skip connections from the shared encoder's earlier layers specifically because fine-grained boundary precision degrades badly without those skip connections, the deepest encoder features alone have lost too much spatial resolution to draw an accurate defect outline.
-
-## Why I Added a Keypoint Head Most Inspection Systems Skip
-
-Most surface inspection demos stop at detection and segmentation. I added a geometric keypoint head deliberately, because in a real multi-site deployment, the same part can be photographed from slightly different camera angles and rig setups between factories. Keypoints anchored to stable geometric features give downstream measurement code a way to normalize for that camera variation, something raw bounding boxes can't do on their own.
-
-## Why Loss Weighting Is Learned, Not Hand-Tuned
-
-With three tasks training jointly, the naive approach is manually setting fixed weights for each task's loss term and tuning them by trial and error, which is slow and brittle, the right weights can shift as training progresses. I implemented uncertainty-based loss weighting from Kendall et al., where the model learns a per-task uncertainty parameter that automatically rebalances the loss weights during training. That removed an entire category of manual hyperparameter search and, more importantly, adapts automatically if one task's loss landscape changes shape partway through training, which fixed weights cannot do.
-
-## Why Domain Randomization Was Non-Negotiable
-
-Real inspection lines have wildly inconsistent lighting, surface coatings, and camera hardware between sites. I treated aggressive domain randomization during training, varying lighting, texture, and simulated camera noise, as a requirement rather than an optional augmentation, because a model that performs well only under the lighting conditions of its training factory is not a deployable product, it's a demo that happens to work in one room.`,
-    technologies: ['PyTorch', 'EfficientNet-B4', 'Multi-task Learning', 'Object Detection', 'Semantic Segmentation', 'Keypoint Detection', 'MVTec AD', 'Docker'],
-    color: '#b45309',
-    status: 'Jun 2026',
+    imageUrl: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=800&q=80',
+    description: 'Production-grade multi-task CV system for industrial surface inspection. Shared EfficientNet-B4 backbone runs detection (anchor-free), pixel-level segmentation (U-Net decoder), and geometric keypoint extraction simultaneously. Trained on MVTec AD with DDP multi-GPU support, uncertainty-based loss weighting (Kendall et al.), and Docker deployment.',
+    technologies: ['PyTorch', 'EfficientNet-B4', 'Multi-task Learning', 'Object Detection', 'Semantic Segmentation', 'Keypoint Detection', 'DDP Training', 'MVTec AD', 'Docker'],
     github: 'https://github.com/Mahlet333/Multi-head-surface-inspection-pipeline',
+    detailedDescription: `# Multi-Head Surface Inspection Pipeline
+
+A production-grade computer vision system that runs detection, segmentation, and keypoint extraction simultaneously from a single shared encoder — the architecture pattern used in real industrial inspection deployments.
+
+<div id="proj21-arch" class="widget-block"></div>
+
+## Why Multi-Task?
+
+Running three separate models triples inference latency. A shared backbone extracts features once; each head reads from the same feature pyramid. This is how production CV systems are actually built.
+
+## Architecture
+
+\`\`\`
+Input Image (3×H×W)
+        │
+   Shared Encoder    ← EfficientNet-B4 / ResNet-50
+   (multi-scale)       feature pyramid P3, P4, P5
+        │
+   ┌────┼──────────────────┐
+   │    │                  │
+Detection  Segmentation  Keypoint
+  Head      Head (U-Net)   Head
+   │           │              │
+BBoxes    Pixel masks    Geometric
++ Scores    (H×W)        keypoints
+            defect masks  (N × 2+conf)
+\`\`\`
+
+## Head Design Rationale
+
+**Detection head (anchor-free):** Anchor-based detectors require per-dataset anchor tuning. Anchor-free heads predict directly from feature map locations — more flexible, fewer hyperparameters, better generalization across defect scales and shapes.
+
+**Segmentation head (U-Net decoder):** Skip connections from P3/P4/P5 preserve fine-grained boundary information. Produces pixel-precise defect masks for localization and area measurement.
+
+**Keypoint head:** Geometric feature extraction invariant to camera position and hardware variation — critical for cross-site deployment where inspection rigs differ between factories.
+
+## Key Engineering Decisions
+
+**Domain randomization:** Real inspection lines have variable lighting, surface coatings, and camera hardware. Aggressively randomized augmentation forces the model to learn features invariant to these conditions — the core challenge in cross-site deployment.
+
+**Uncertainty-based loss weighting (Kendall et al. 2018):** The model automatically learns how to weight each task's loss during training. Critical in multi-task systems where task gradients conflict — eliminates manual tuning of λ_det, λ_seg, λ_kp.
+
+**Multi-GPU DDP training:** Full PyTorch DistributedDataParallel support for scaling to larger datasets.
+
+## Dataset
+
+MVTec Anomaly Detection (MVTec AD): 15 industrial categories, 5,354 high-resolution images, pixel-precise anomaly annotations.
+
+## Infrastructure
+
+- Dockerfile for reproducible environment
+- \`inference/benchmark.py\` for FPS/latency/GPU utilization profiling
+- Unit tests for all model components
+- YAML config for all hyperparameters`
   },
   {
     id: 22,
     title: 'End-to-End MLOps System with Drift Detection',
     subtitle: 'ML Engineering / Production Systems',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1200&q=80',
-    description: 'A full ML lifecycle system built around a specific frustration: most ML projects stop at a trained model and treat everything after that, deployment and monitoring, as somebody else\'s problem.',
-    detailedDescription: `# Why I Built the Boring Half of Machine Learning
-
-Most ML portfolio projects end at a trained model with a reported accuracy number. That model then either dies in a notebook or gets handed off to an imaginary "deployment team." I built this project specifically to force myself through the part that usually gets skipped: what happens to a model after it ships, when the data it sees in production starts drifting away from the data it was trained on, silently, without anyone necessarily noticing until performance has already degraded.
-
-## Why Four Different Drift Detectors, Not One
-
-I implemented MMD, KS test, PSI, and CUSUM together rather than picking the one that's easiest to explain. Each catches a different failure mode, and using only one leaves a blind spot. KS test is fast but fundamentally one-dimensional, so it can miss drift in the relationships between features even when each feature looks fine individually. MMD operates on full embedding vectors, which is what's actually needed to catch drift in a model's learned representations rather than just its raw inputs. PSI is the standard the credit risk industry already trusts, useful as a sanity-check baseline. None of those three, on their own, catch slow, gradual drift, the kind that doesn't cross any single-snapshot threshold but accumulates over weeks. CUSUM is the one designed specifically for that: it sums small deviations over time and flags when the cumulative sum crosses a threshold, catching the drift pattern the other three are blind to.
-
-## Why Leakage Prevention Is Enforced at the Pipeline Level, Not Just Documented
-
-The most common, quietly fatal mistake in ML pipelines is fitting a feature transformation (a scaler, an encoder) on data that includes information from the validation or test set. I didn't just write that rule down as a guideline, I structured the feature engineering code so that every transformation is fit exclusively on training folds and only ever applied, never re-fit, to validation folds. That's a deliberate architectural choice, not a discipline I'm trusting myself to remember every time, because the failure mode (overly optimistic cross-validation scores that don't hold up in production) is exactly the kind of mistake that's invisible until the model underperforms after deployment.
-
-## Why ONNX and TensorRT Instead of Serving the PyTorch Model Directly
-
-I export the trained model through ONNX and then optimize it with TensorRT rather than serving the raw PyTorch model in production. That extra export step adds engineering overhead and a layer of conversion bugs to debug. I accepted that cost because PyTorch's eager-mode inference is meaningfully slower than a TensorRT-optimized graph, and inference latency compounds at production scale in a way that's invisible during development on a single test example but very visible once you're serving real traffic.
-
-## Why Retraining Triggers Are Automated, Not a Manual Review Step
-
-The monitoring system doesn't just raise a dashboard alert when drift crosses a threshold, it can automatically trigger the retraining pipeline. I made that an explicit design choice rather than defaulting to "alert a human and let them decide," because the entire point of building automated drift detection is removing the lag between detecting a problem and acting on it. A human-in-the-loop alert system still depends on someone checking a dashboard regularly, which is exactly the kind of process gap that lets drift quietly degrade a model for weeks before anyone notices.`,
-    technologies: ['Python', 'FastAPI', 'ONNX', 'TensorRT', 'Docker', 'MLOps', 'Drift Detection', 'MMD', 'CUSUM', 'PSI', 'Feature Engineering'],
-    color: '#6d28d9',
-    status: 'Jun 2026',
+    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+    description: 'Full ML pipeline from raw data ingestion to deployed FastAPI inference API, with automated distribution shift monitoring (MMD, KS test, PSI, CUSUM) and retraining triggers. Covers ETL, feature store, model registry, ONNX/TensorRT export, Docker, and real-time monitoring dashboards.',
+    technologies: ['Python', 'FastAPI', 'ONNX', 'TensorRT', 'Docker', 'MLOps', 'Drift Detection', 'MMD', 'CUSUM', 'PSI', 'Feature Engineering', 'Model Registry'],
     github: 'https://github.com/Mahlet333/End-to-end-MLOps-system-with-drift-detection',
+    detailedDescription: `# End-to-End MLOps System with Drift Detection
+
+A production ML system that covers every stage of the ML lifecycle — from raw data ingestion through feature engineering, training, evaluation, deployment, and continuous monitoring — with automated drift detection and retraining triggers.
+
+<div id="proj22-arch" class="widget-block"></div>
+
+## System Architecture
+
+\`\`\`
+DATA LAYER
+  Raw Data → ETL Pipeline → Feature Store → Versioned Dataset Registry
+
+TRAINING PIPELINE
+  preprocessing/ → training/ → evaluation/ → Model Registry
+  (normalize,       (CV, early   (ROC/PR,
+   validate,         stopping)    threshold tuning)
+   split, features)
+
+DEPLOYMENT LAYER
+  PyTorch → ONNX Export → TensorRT Opt → FastAPI → Docker
+
+MONITORING & DRIFT DETECTION
+  Feature Drift    → Prediction Drift → Performance Drift
+  (MMD, KS test)    (output shift)      (label feedback)
+       └──────────────────┴────────────────────┘
+                          │
+             Drift Alert → Retraining Trigger → Auto-Retrain
+\`\`\`
+
+## Drift Detection Suite
+
+| Detector | Method | Why |
+|---|---|---|
+| Feature drift | MMD (Maximum Mean Discrepancy) | Works on full embedding vectors, not just 1D |
+| Feature drift | KS test | Fast 1D feature distribution check |
+| Covariate shift | PSI (Population Stability Index) | Standard credit/ML industry metric |
+| Gradual drift | CUSUM | Sequential change-point detection — catches slow drift before it degrades performance |
+
+**Why MMD over KS for embeddings:** KS test is inherently 1D. MMD operates on full feature vectors — essential for detecting distribution shift in learned representations.
+
+**Why CUSUM:** Threshold-based methods only detect sudden shifts. CUSUM accumulates small deviations, catching gradual drift weeks before model performance degrades. Critical in production.
+
+## Feature Engineering
+
+Per-fold feature selection with strict leakage prevention: all transformations (scaling, encoding, selection) fitted only on training folds, applied to validation. This prevents information from validation data contaminating feature engineering — the most common source of overly optimistic CV results.
+
+## What This Covers
+
+| ML Engineering Skill | Implementation |
+|---|---|
+| ETL pipeline | Schema validation, partitioning, versioning |
+| Feature engineering | Per-fold scaling, leakage prevention |
+| Model training | Cross-validation, early stopping, checkpointing |
+| Model evaluation | Threshold tuning, ROC/PR curves |
+| ONNX export | PyTorch → ONNX → TensorRT |
+| FastAPI serving | Async inference, batching, health checks |
+| Docker | Multi-stage build, env reproducibility |
+| Drift detection | MMD, KS, PSI, CUSUM |
+| Monitoring | Real-time dashboards, alert routing |
+| Retraining triggers | Automated pipeline re-invocation |`
   },
   {
     id: 23,
     title: 'Sim2Real Transfer for Visual Policy Learning',
     subtitle: 'Robotics / Reinforcement Learning',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1563207153-f403bf289096?auto=format&fit=crop&w=1200&q=80',
-    description: 'A transfer pipeline built on the recognition that simulation and reality disagree in ways that no single technique fully fixes, which is why this project combines three complementary methods instead of betting on one.',
-    detailedDescription: `# Why One Transfer Technique Was Never Going to Be Enough
-
-Training a robot policy in simulation is fast, safe, and cheap. Deploying that same policy on real hardware routinely fails, because simulated visuals never perfectly match real camera noise, lighting, and texture. The temptation, after reading any single paper on sim-to-real transfer, is to pick its headline technique and assume it solves the problem. I made a different decision early on: combine three complementary mechanisms, because each one fixes a different part of the gap, and none of them, alone, fixes all of it.
-
-## Why Domain Randomization Comes First, Not Last
-
-I treat domain randomization, aggressively varying lighting, textures, and camera position during simulated training, as the foundation, not an afterthought layered on at the end. The reasoning is that randomization forces the policy to learn features that are robust to visual variation by construction, during training, rather than hoping a later adaptation step can patch over a policy that overfit to one specific simulated appearance. Skipping this step and relying purely on adaptation at deployment time would mean asking a brittle policy to generalize, which is a much harder problem than training a robust one from the start.
-
-## Why Adaptive Normalization Is the Lightweight Middle Layer
-
-Domain randomization alone doesn't fully close the gap, because some real-world visual statistics simply can't be anticipated during simulation, no matter how aggressively you randomize. Adaptive normalization, learned per-domain batch normalization parameters, gives the policy a fast, lightweight way to adjust its internal feature statistics once it sees real observations, without retraining the whole network. I chose this over a heavier fine-tuning step specifically because it's cheap enough to apply at deployment time, which matters if the policy needs to adapt quickly to a new robot or environment.
-
-## Why Adversarial Domain Adaptation Is the Last, Most Expensive Layer
-
-The final mechanism, an adversarial discriminator trying to distinguish simulated from real features while the encoder learns to fool it, is the most computationally expensive of the three, and I added it last and deliberately, only after the first two mechanisms were in place. Adversarial training alone, without prior randomization, tends to be unstable, the discriminator can win too easily early in training if the encoder hasn't already learned somewhat robust features. Layering it on top of an already-randomized policy gave the adversarial objective something more stable to refine, rather than asking it to do all the transfer work alone.
-
-## Why I Didn't Just Pick the Easiest Technique
-
-It would have been faster to implement only domain randomization and call the project done, since it's the simplest of the three to get working. I chose to build all three because the actual research literature on sim-to-real transfer is consistent on one point: no single technique closes the gap completely, and the techniques are complementary rather than redundant. Building only one would have been a faster project and a less honest one, given what I already knew going in about where each technique falls short on its own.`,
-    technologies: ['PyTorch', 'Reinforcement Learning', 'Domain Randomization', 'Domain Adaptation', 'Robotics', 'Adversarial Training', 'Sim-to-Real'],
-    color: '#0369a1',
-    status: 'Jun 2026',
+    imageUrl: 'https://images.unsplash.com/photo-1563207153-f403bf289096?auto=format&fit=crop&w=800&q=80',
+    description: 'A robot trained entirely in simulation walks onto real hardware and falls apart — lighting, textures, camera noise, none of it matches what it learned on. This pipeline stacks three transfer mechanisms to close that gap without retraining from scratch on real data.',
+    technologies: ['PyTorch', 'Reinforcement Learning', 'Domain Randomization', 'Domain Adaptation', 'Robotics', 'Visual Policy Learning', 'Adversarial Training', 'Sim-to-Real'],
     github: 'https://github.com/Mahlet333/sim2real',
+    detailedDescription: `## The thing nobody tells you about simulation
+
+A policy that gets 95% success in simulation can fall to single digits the moment it sees a real camera feed. Not because the policy is bad — because simulated light doesn't behave like real light, simulated friction doesn't behave like real friction, and a neural net trained on one distribution has zero obligation to generalize to another. This pipeline exists to force generalization instead of hoping for it.
+
+<div id="s2r-arch" class="widget-block"></div>
+
+## Three mechanisms, none of them sufficient alone
+
+**Domain Randomization** — every episode, scramble lighting direction/intensity, object textures, background, camera pose, sensor noise. The policy can't memorize one simulated world because there isn't one fixed world to memorize.
+
+**Adaptive Normalization** — per-domain batch norm with learned affine parameters. When the input distribution shifts from sim to real, the network adjusts its internal feature statistics on the fly instead of needing a full retrain.
+
+**Adversarial Visual Domain Adaptation** — a discriminator tries to tell sim features from real features apart. The encoder's job is to make that impossible. Direct pressure on the distribution gap, not a side effect of the other two.
+
+<div id="s2r-graveyard" class="widget-block"></div>
+
+## Why all three at once and not just one
+
+- Randomization alone doesn't cover every discrepancy you didn't think to randomize
+- Adaptive normalization adjusts statistics but doesn't align the underlying distributions
+- Adversarial adaptation aligns distributions but trains unstably without randomization giving it diverse inputs to work with
+
+Stacked together they're redundant on purpose — each one catches what the others miss.
+
+## Research line
+
+This work feeds directly into ongoing research at the Computational Biology & Bioinformatics Lab at NYU Abu Dhabi, where the same underlying question — how do you build models that generalize across distribution shift instead of memorizing one fixed dataset — shows up again, just with MRI scans and microbiome data standing in for simulation and reality.`
   },
   {
     id: 24,
-    title: 'A2S Transfer Task: Norm Grounding Gap in LLMs',
-    subtitle: 'NLP Research / AI Evaluation Benchmark, NYU Abu Dhabi',
+    title: 'A2S Transfer Task — Norm Grounding Gap in LLMs',
+    subtitle: 'NLP Research / AI Evaluation Benchmark',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=1200&q=80',
-    description: 'A benchmark co-authored with Aneeka Paul measuring a specific, narrow gap: how much worse large language models get at recognizing social norm violations once you embed them in real conversation instead of asking about them directly.',
-    detailedDescription: `# Why "The Model Knows the Norm" Isn't the Same as "The Model Can Apply It"
-
-Ask GPT-4 directly whether it's rude to interrupt someone mid-sentence, and it answers correctly almost every time. That fact alone tells you very little about whether the same model can recognize that exact violation happening inside an actual, naturalistic conversation, with discourse context, implicit cues, and social subtext layered on top. My co-author Aneeka Paul and I built this benchmark specifically to isolate that gap, which we named the Norm Grounding Gap, rather than accepting strong performance on abstract questions as evidence of situated social understanding.
-
-## Why Three Levels Instead of Two
-
-We could have designed a simple A versus B comparison: abstract questions versus full conversations. We added a middle level, B, brief low-context scenarios, specifically to localize where performance degrades. Without that middle rung, a drop from Level A to a full conversational Level C tells you something breaks, but not whether it breaks gradually as context increases or sharply at the point where genuine conversational grounding is required. The three-level design let us see the shape of the degradation curve, not just its endpoints.
-
-## Why We Built the Dataset From NormBank Instead of Writing Scenarios by Hand
-
-We could have hand-written conversational scenarios embedding norm violations, which would have been faster. We built the dataset by systematically lifting NormBank's existing social norm annotations into conversational contexts using controlled generation templates instead, because hand-written scenarios risk smuggling in our own assumptions about what counts as a clear violation. Grounding the dataset in an established, independently annotated norm bank gave the benchmark a more defensible foundation than scenarios we invented ourselves.
-
-## Why We Tested Three Different Model Families, Not Just One
-
-Benchmarking a single model and finding a gap tells you something about that model. We deliberately ran GPT-4, Claude, and Llama through the same three-level pipeline, because the interesting claim isn't "this one model struggles with situated context," it's whether the gap is a property of language models generally or an artifact of one architecture's training. Finding the same statistically significant gap across all three model families, confirmed with McNemar's test rather than a simple accuracy comparison, is what let us argue this is a systematic limitation, not a quirk.
-
-## Why We Used McNemar's Test Specifically
-
-A simple comparison of accuracy at Level A versus Level C doesn't account for the fact that the same model is being evaluated on paired items, the same underlying norm violation at different levels of context. McNemar's test is built for exactly that paired structure, comparing how often a model gets an item right at one level and wrong at another, rather than treating the two accuracy numbers as independent. That statistical choice was necessary to claim the gap is significant rather than noise, given the paired nature of our evaluation design.
-
-## What the Finding Actually Implies
-
-The result that model rankings at Level A don't predict rankings at Level C, models that look similar in the abstract diverge substantially once context is added, is the part of this work I think has the most real-world consequence. As language models get deployed in contexts that require situated social judgment, mental health support, conflict mediation, classroom assistance, an evaluation based only on abstract norm questions would systematically overstate how ready a model actually is for those settings.`,
-    technologies: ['NLP', 'LLM Evaluation', 'Python', 'GPT-4', 'Claude API', 'NormBank', 'McNemar Test', 'Benchmark Design'],
-    color: '#be123c',
-    status: 'Spring 2026',
+    imageUrl: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=800&q=80',
+    description: 'Co-authored NLP benchmark (NYU Abu Dhabi, Spring 2026) measuring whether LLMs can detect social norm violations in naturalistic conversation vs. isolated questions. Defines and quantifies the "Norm Grounding Gap" across GPT-4, Claude, and Llama — revealing systematic failure modes in situated social reasoning.',
+    technologies: ['NLP', 'LLM Evaluation', 'Python', 'GPT-4', 'Claude API', 'NormBank', 'McNemar Test', 'Benchmark Design', 'Social AI'],
     github: 'https://github.com/Mahlet333/ASI_Final_Project',
+    detailedDescription: `# A2S Transfer Task — Measuring the Norm Grounding Gap in LLMs
+
+**CS-UH 3260 · Artificial Social Intelligence · NYU Abu Dhabi · Spring 2026**  
+Authors: Aneeka Paul, Mahlet Atrsaw Andargei
+
+## The Research Question
+
+LLMs perform well on abstract social norm questions asked in isolation. But embed the same norm violation in a naturalistic four-turn conversation — and performance drops sharply. We define this as the **Norm Grounding Gap**: the delta in model accuracy between abstract norm judgment and situated conversational understanding.
+
+<div id="a2s-arch" class="widget-block"></div>
+
+## Three-Level Evaluation Framework
+
+- **Level A (Abstract):** Direct questions about norm acceptability — isolated from context. LLMs perform well here.
+- **Level B (Bridge):** Norm violations in brief, low-context scenarios. Moderate performance drop.
+- **Level C (Situated):** Same violations embedded in naturalistic four-turn conversations with discourse context, implicit cues, and social subtext. Significant performance drop.
+
+Dataset constructed from NormBank social norm annotations, lifted into conversational contexts using controlled generation templates.
+
+## Technical Pipeline
+
+\`\`\`
+dataset_constructor.py
+  Sample from NormBank → generate Level A/B/C items
+  Output: items_levelA/B/C.jsonl (structured benchmark)
+
+inference_engine.py
+  Run GPT-4, Claude, Llama across all three levels
+  Output: parsed binary judgments per model × level
+
+evaluator.py
+  Accuracy, precision, recall per model × level
+  McNemar's test for within-model A→C significance
+  Output: metrics_summary.json
+
+visualizer.py
+  Norm Grounding Gap bar charts
+  Per-model degradation curves across levels
+\`\`\`
+
+## Key Findings
+
+The Norm Grounding Gap is real, statistically significant (McNemar's test), and model-invariant — it appears across GPT-4, Claude, and Llama. This reveals a systematic limitation in how LLMs ground social norms into conversational context, not a quirk of any single model.
+
+Models that perform similarly at Level A diverge substantially at Level C — meaning **abstract social reasoning capability does not predict situated social understanding**.
+
+## Why This Matters
+
+As LLMs are increasingly deployed in socially consequential settings — mental health support, conflict mediation, education — understanding exactly where their social reasoning fails is critical. This benchmark provides a rigorous, reproducible tool for measuring that gap.`
   },
   {
     id: 25,
     title: 'Anime Character Visual Design Classification',
     subtitle: 'Computer Vision / Feature Engineering Research',
     category: 'ml',
-    imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80',
-    description: 'A study testing whether the unspoken visual rules anime designers follow for heroes versus villains are consistent enough to be learned by a model, run as three competing approaches instead of one to see which kind of feature actually carries the signal.',
-    detailedDescription: `# Are Hero and Villain Designs Actually Following Rules, or Just Habits
-
-Anime character design has informal conventions: heroes tend toward warm colors and soft edges, villains toward cool palettes and sharp shadows. The question I wanted to test wasn't whether those conventions exist anecdotally, everyone who watches anime can list a few examples, but whether they're consistent enough across many characters to be statistically learnable, and which kind of visual feature actually carries that signal.
-
-## Why I Ran Three Separate Approaches Instead of Picking the Best One Upfront
-
-I could have started with whichever method seemed most promising, deep transfer learning, and stopped there. I deliberately ran three different approaches in parallel instead: 50-plus handcrafted design features, CLIP ViT-L/14 semantic embeddings, and VGGFace2 transfer learning from human face recognition. The reason was that each approach answers a different question. Handcrafted features test whether explicit design-convention knowledge (color ratios, edge density, shadow distribution) is sufficient on its own. CLIP tests whether a model trained on generic image-text pairs already has an implicit sense of "hero" and "villain" without any anime-specific training. VGGFace2 tests something else entirely: whether human face recognition features transfer to a stylized, non-photorealistic domain at all. Running only one would have answered only one of those questions.
-
-## Why Handcrafted Features Outperformed the Fancier Deep Embeddings
-
-The result that surprised me most was that 50-plus handcrafted design features, combined with a relatively simple ResNet18, outperformed both CLIP and VGGFace2 transfer learning, reaching about 80 percent accuracy and 0.90 AUC-ROC. That's not the result deep learning intuition usually predicts, where bigger pretrained models tend to win by default. The explanation, once I looked closer, made sense: the handcrafted features were built directly around the specific visual conventions (warm versus cool palette ratios, edge sharpness, shadow density) that actually drive hero-villain design, while CLIP's pretraining never specifically learned anime stylization, and VGGFace2's pretraining is built around human facial geometry, not stylized character design. Domain-specific feature engineering beat domain-general pretrained representations here, which is a finding worth remembering before defaulting to the biggest available pretrained model.
-
-## Why Villain Recall Being Higher Than Hero Recall Matters
-
-Across all three approaches, villain classification had consistently higher recall than hero classification. I didn't treat that asymmetry as noise, I treated it as a finding in its own right: it suggests villain design follows a tighter, more consistent visual template across different anime and studios, while hero design is more visually diverse and harder to pin down with a fixed feature set. That asymmetry is, on its own, a small piece of evidence about how character archetypes are constructed differently depending on their narrative role.
-
-## Why VGGFace2's Partial Success Was the Most Conceptually Interesting Result
-
-VGGFace2, pretrained entirely on real human faces, achieved about 66.7 percent accuracy on stylized anime faces, well above chance but well below the handcrafted-feature approach. I find that partial transfer more interesting than either a clean success or a clean failure would have been, because it implies anime character design retains enough structural similarity to real human facial geometry that human-face-trained features carry some signal, even though the stylization clearly degrades how much of that signal survives. That's a more nuanced finding than "transfer learning works" or "transfer learning doesn't work," and it's the kind of result that only shows up when you test the boundary case directly instead of assuming it either way.`,
-    technologies: ['PyTorch', 'CLIP ViT-L/14', 'VGGFace2', 'Feature Engineering', 'Transfer Learning', 'Computer Vision', 'ResNet18', 'SHAP'],
-    color: '#7c3aed',
-    status: 'Dec 2025',
+    imageUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
+    description: 'Multi-approach CV study classifying anime characters as heroes or villains using 50+ handcrafted design features, CLIP ViT-L/14 embeddings, and VGGFace2 transfer learning. Achieves ~80% accuracy and ~0.90 AUC-ROC with design features + ResNet18. Computationally validates design conventions: warm/cool palettes, edge sharpness, and shadow density are the strongest discriminators.',
+    technologies: ['PyTorch', 'CLIP ViT-L/14', 'VGGFace2', 'Feature Engineering', 'Transfer Learning', 'Computer Vision', 'ResNet18', 'SHAP', 'Open-CLIP'],
     github: 'https://github.com/Mahlet333/Machine-Learning-Final-Project',
+    detailedDescription: `# Computational Analysis of Visual Design Conventions in Anime Character Classification
+
+A machine learning research study investigating whether hero/villain visual design conventions in anime are computationally learnable — and which features drive the signal.
+
+## The Research Question
+
+Anime character designers follow implicit conventions: heroes tend to have warm palettes, soft edges, open expressions. Villains get cool/dark palettes, sharp edges, high shadow density. Are these patterns consistent enough to be learned from image features alone? And do learned deep representations capture the same things as handcrafted domain features?
+
+<div id="anime-stats" class="widget-block"></div>
+
+## Three Classification Approaches
+
+### 1. Design Convention Features (50+ handcrafted)
+Features derived from anime design principles:
+- Color palette analysis: HSV histograms, warm/cool ratio, saturation distribution
+- Texture features: LBP (Local Binary Patterns), Gabor filter responses
+- Edge characteristics: Canny edge density, sharpness distribution
+- Shadow density and spatial distribution
+- Geometric face structure measurements
+
+**Result: ~80% accuracy | ~89% F1 | ~0.90 AUC-ROC**
+
+### 2. CLIP ViT-L/14 Semantic Embeddings
+Tests whether CLIP's semantic understanding of "hero" and "villain" — learned from 400M image-text pairs — aligns with visual design conventions in anime.
+
+### 3. Face-Trained Transfer Learning (VGGFace2 / ArcFace)
+**Result: ~66.7% accuracy** — domain transfer from real human faces to stylized anime faces partially works, revealing structural similarity between human face geometry and anime stylization conventions.
+
+## Key Research Findings
+
+1. **Villain design is more distinctive than hero design** — higher recall for villain classification across all methods. Heroes are visually diverse; villains follow more consistent design templates. This asymmetry is statistically robust.
+
+2. **Color palette is the strongest discriminator** — warm (red/orange) vs. cool (blue/purple) color ratios are top features across all approaches.
+
+3. **Edge sharpness and shadow density matter** — computationally validates what animators intuit about villain design.
+
+4. **Handcrafted features and learned representations are complementary** — neither dominates, suggesting domain knowledge and end-to-end learning capture different aspects of the visual signal.
+
+## Broader Significance
+
+Visual design conventions in media are computationally learnable and interpretable. This has implications for content analysis, character generation, and understanding how visual archetypes encode cultural meaning — and serves as a rigorous comparison of feature engineering versus representation learning in a novel visual domain.`
   },
 ];
 
@@ -768,11 +1215,11 @@ Creative coding follows a different process than traditional software developmen
 
 ## Examples of Creative Coding
 
-**Generative Art** ,  Creating art that's generated by algorithms rather than drawn by hand.
+**Generative Art** — Creating art that's generated by algorithms rather than drawn by hand.
 
-**Interactive Installations** ,  Art that responds to human input: movement, sound, touch.
+**Interactive Installations** — Art that responds to human input: movement, sound, touch.
 
-**Data Visualization** ,  Turning complex data into beautiful, understandable visual representations.
+**Data Visualization** — Turning complex data into beautiful, understandable visual representations.
 
 ## The Future of Creative Coding
 
